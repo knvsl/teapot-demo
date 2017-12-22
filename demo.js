@@ -34,24 +34,26 @@ var helperSize = 0.5;
 var lightHelper = new THREE.PointLightHelper( light, helperSize, helperColor);
 scene.add( lightHelper );
 
-// Material properties
-var ambientColor = new THREE.Color( 0.4, 0.4, 0.4 );
-var kAmbient = 0.4;
-var kDiffuse = 0.8;
-var kSpecular = 0.5;
-var shininess = 5.0;
-var alphaX = 0.7;
-var alphaY = 0.1;
+// Material Properties
+var material = {
+  shininess : 5.0,
+  kAmbient : 0.4,
+  kSpecular : 0.5,
+  kDiffuse : 0.8,
+  ambientColor : new THREE.Color( 0.4, 0.4, 0.4 ),
+  alphaX : 0.7,
+  alphaY : 0.1
+}
 
 // Uniforms
 var phongUniforms = {
   lightColor : {type: "c", value: lightColor},
-  ambientColor : {type: "c", value: ambientColor},
+  ambientColor : {type: "c", value: material.ambientColor},
   lightPosition : {type: "v3", value: light.position},
-  kAmbient : {type: "f", value: kAmbient},
-  kDiffuse : {type: "f", value: kDiffuse},
-  kSpecular : {type: "f", value: kSpecular},
-  shininess : {type: "f", value: shininess}
+  kAmbient : {type: "f", value: material.kAmbient},
+  kDiffuse : {type: "f", value: material.kDiffuse},
+  kSpecular : {type: "f", value: material.kSpecular},
+  shininess : {type: "f", value: material.shininess}
 };
 
 // Materials
@@ -65,7 +67,6 @@ var shaderFiles = [
   'glsl/phong.fs.glsl',
 ];
 
-
 var loader = new THREE.FileLoader();
    loader.load('glsl/phong.vs.glsl', function(shader) {
      phongMaterial.vertexShader = shader
@@ -73,8 +74,6 @@ var loader = new THREE.FileLoader();
    loader.load('glsl/phong.fs.glsl', function(shader) {
      phongMaterial.fragmentShader = shader
    });
-
-// Build Scene
 
 // Objects
 var teapot;
@@ -98,33 +97,39 @@ loader.load('obj/teapot.obj', function(object) {
   teapot = scene.getObjectByName('teapot');
  });
 
-/*
-// Floor
-var planeGeometry = new THREE.PlaneBufferGeometry( 5, 5 );
-var planeMaterial = new THREE.MeshBasicMaterial( {color: 0xD3D3D3, side: THREE.DoubleSide} );
-var plane = new THREE.Mesh( planeGeometry, planeMaterial );
-plane.rotation.x = -0.5 * Math.PI;
-scene.add( plane );
-*/
-
-// TODO: Options to change shader and then edit values 
+// DAT.GUI controls
 var gui = new dat.GUI();
 
-var teapotControl = gui.addFolder('Teapot');
+var teapotControl = gui.addFolder('Phong Shader');
+gui.add(material, 'shininess', 0, 50);
+gui.add(material, 'kAmbient', 0, 1);
+gui.add(material, 'kSpecular', 0, 1);
+gui.add(material, 'kDiffuse', 0, 1);
 teapotControl.open();
 
+// Update with GUI selections
+function updatePhongUniforms() {
+
+  phongUniforms.shininess.value = material.shininess;
+  phongUniforms.kAmbient.value = material.kAmbient;
+  phongUniforms.kDiffuse.value = material.kDiffuse;
+  phongUniforms.kSpecular.value = material.kSpecular;
+
+  phongMaterial.needsUpdate = true;
+}
 
 // Render Scene
 function render() {
     window.requestAnimationFrame( render );
 
-    // Rotate the teapot
+    /* Rotate the teapot
     if(teapot){
       teapot.rotation.x += 0.005;
       teapot.rotation.y += 0.005;
     }
-
+    */
     controls.update();
+    updatePhongUniforms();
 
     renderer.render( scene, camera );
 }

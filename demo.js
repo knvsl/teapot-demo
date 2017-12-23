@@ -1,8 +1,18 @@
 // Renderer
 var renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 renderer.setClearColor(0xFFFFFF);
+
+// Resize window
+function resizeWindow() {
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+}
+
+window.addEventListener('resize', resizeWindow, false);
 
 var scene = new THREE.Scene();
 
@@ -191,4 +201,5 @@ function render() {
     renderer.render( scene, camera );
 }
 
+resizeWindow();
 render();

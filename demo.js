@@ -23,9 +23,8 @@ scene.add( axesHelper );
 
 // Light
 var lightColor = new THREE.Color( 1, 1, 1 );
-var light = new THREE.DirectionalLight( lightColor );
-light.position.set( 5, 5, 0 );
-light.castShadow = true;
+var light = new THREE.PointLight( lightColor );
+light.position.set( 3, 3, 0 );
 scene.add( light );
 
 // Light Helper
@@ -34,18 +33,29 @@ var helperSize = 0.5;
 var lightHelper = new THREE.PointLightHelper( light, helperSize, helperColor);
 scene.add( lightHelper );
 
+// Object Properties
+/*
+  Phong : 0
+  BlinnPhong : 1
+*/
+var obj = {
+  rotate : false,
+  shader : 0,
+};
+
 // Material Properties
 var material = {
-  shininess : 5.0,
+  shininess : 10.0,
   kAmbient : 0.4,
-  kSpecular : 0.5,
+  kSpecular : 0.8,
   kDiffuse : 0.8,
   ambientColor : new THREE.Color( 0.4, 0.4, 0.4 ),
   alphaX : 0.7,
-  alphaY : 0.1
-}
+  alphaY : 0.1,
+};
 
-// Uniforms
+/* PHONG */
+
 var phongUniforms = {
   lightColor : {type: "c", value: lightColor},
   ambientColor : {type: "c", value: material.ambientColor},
@@ -56,12 +66,10 @@ var phongUniforms = {
   shininess : {type: "f", value: material.shininess}
 };
 
-// Materials
 var phongMaterial = new THREE.ShaderMaterial({
   uniforms: phongUniforms,
 });
 
-// Shaders
 var shaderFiles = [
   'glsl/phong.vs.glsl',
   'glsl/phong.fs.glsl',
@@ -74,6 +82,26 @@ var loader = new THREE.FileLoader();
    loader.load('glsl/phong.fs.glsl', function(shader) {
      phongMaterial.fragmentShader = shader
    });
+
+/* Blinn-Phong */
+
+var blinnPhongMaterial = new THREE.ShaderMaterial({
+  uniforms: phongUniforms,
+});
+
+var shaderFiles = [
+  'glsl/blinnphong.vs.glsl',
+  'glsl/blinnphong.fs.glsl',
+];
+
+var loader = new THREE.FileLoader();
+   loader.load('glsl/blinnphong.vs.glsl', function(shader) {
+     blinnPhongMaterial.vertexShader = shader
+   });
+   loader.load('glsl/blinnphong.fs.glsl', function(shader) {
+     blinnPhongMaterial.fragmentShader = shader
+   });
+
 
 // Objects
 var teapot;
@@ -98,16 +126,35 @@ loader.load('obj/teapot.obj', function(object) {
  });
 
 // DAT.GUI controls
-var gui = new dat.GUI();
+var gui = new dat.GUI( { width : 500 } );
 
-var teapotControl = gui.addFolder('Phong Shader');
-gui.add(material, 'shininess', 0, 50);
-gui.add(material, 'kAmbient', 0, 1);
-gui.add(material, 'kSpecular', 0, 1);
-gui.add(material, 'kDiffuse', 0, 1);
-teapotControl.open();
+var teapotControls = gui.addFolder('Phong Shader');
+teapotControls.add(material, 'shininess', 0, 100);
+teapotControls.add(material, 'kAmbient', 0, 1);
+teapotControls.add(material, 'kSpecular', 0, 1);
+teapotControls.add(material, 'kDiffuse', 0, 1);
+teapotControls.open();
 
-// Update with GUI selections
+gui.add(obj, 'rotate');
+var shaderControl = gui.add(obj, 'shader', { Phong : 0, BlinnPhong : 1 } );
+
+// Update Shader
+shaderControl.onChange(function(shader) {
+
+  switch (+shader) {
+    case 0:
+      setMaterial(teapot, phongMaterial);
+      break;
+    case 1:
+      setMaterial(teapot, blinnPhongMaterial);
+      break;
+    default:
+      setMaterial(teapot, phongMaterial);
+  }
+
+});
+
+// Update uniform values
 function updatePhongUniforms() {
 
   phongUniforms.shininess.value = material.shininess;
@@ -116,20 +163,30 @@ function updatePhongUniforms() {
   phongUniforms.kSpecular.value = material.kSpecular;
 
   phongMaterial.needsUpdate = true;
+  blinnPhongMaterial.needsUpdate = true;
+}
+
+// Set object material
+function setMaterial (object, material) {
+  object.traverse(function(child) {
+    if (child instanceof THREE.Mesh){
+      child.material = material;
+    }
+  });
 }
 
 // Render Scene
 function render() {
     window.requestAnimationFrame( render );
 
-    /* Rotate the teapot
-    if(teapot){
+    controls.update();
+    updatePhongUniforms();
+
+    // Rotate teapot
+    if(teapot && obj.rotate) {
       teapot.rotation.x += 0.005;
       teapot.rotation.y += 0.005;
     }
-    */
-    controls.update();
-    updatePhongUniforms();
 
     renderer.render( scene, camera );
 }

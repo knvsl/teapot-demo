@@ -660,7 +660,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		if ( scope.enabled === false ) return;
 
-		event.preventDefault();
+		// Comment out for dat.GUI dropdown menu
+		//event.preventDefault();
 
 		switch ( event.button ) {
 

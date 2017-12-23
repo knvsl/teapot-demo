@@ -17,8 +17,8 @@ void main() {
 	vec3 v = normalize(-vPosition);
 	vec3 n = normalize(vNormal);
 
-  // Bounce vector
-	vec3 b = -l + 2.0 * dot(l,n) * n;
+  // Halfway vector
+	vec3 h = normalize(l + v);
 
 	// Ambient
 	vec3 ambientLight = kAmbient * ambientColor;
@@ -28,11 +28,11 @@ void main() {
 	vec3 diffuseLight = kDiffuse * lightColor * diffuse;
 
 	// Specular
-	float specular = pow(max(0.0, dot(b,v)), shininess);
+	float specular = pow(max(0.0, dot(h,n)), shininess);
 	vec3 specularLight = kSpecular * lightColor * specular;
 
 	// Total Light
-	vec3 totalLight = ambientLight + diffuseLight + specularLight;
+	vec3 totalLight = ambientLight + diffuseLight; + specularLight;
 	gl_FragColor = vec4(totalLight, 0.0);
 
 }

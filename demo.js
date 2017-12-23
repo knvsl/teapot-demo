@@ -138,15 +138,15 @@ loader.load('obj/teapot.obj', function(object) {
 // DAT.GUI controls
 var gui = new dat.GUI( { width : 500 } );
 
-var teapotControls = gui.addFolder('Phong Shader');
-teapotControls.add(material, 'shininess', 0, 100);
-teapotControls.add(material, 'kAmbient', 0, 1);
-teapotControls.add(material, 'kSpecular', 0, 1);
-teapotControls.add(material, 'kDiffuse', 0, 1);
+var teapotControls = gui.addFolder('Uniforms');
+teapotControls.add(material, 'shininess', 0, 100).name('Shininess');
+teapotControls.add(material, 'kAmbient', 0, 1).name('Ambient Intensity');
+teapotControls.add(material, 'kSpecular', 0, 1).name('Specular Intensity');
+teapotControls.add(material, 'kDiffuse', 0, 1).name('Diffuse Intensity');
 teapotControls.open();
 
-gui.add(obj, 'rotate');
-var shaderControl = gui.add(obj, 'shader', { Phong : 0, BlinnPhong : 1 } );
+gui.add(obj, 'rotate').name('Rotate');
+var shaderControl = gui.add(obj, 'shader', { Phong : 0, BlinnPhong : 1 } ).name('Shader');
 
 // Update Shader
 shaderControl.onChange(function(shader) {

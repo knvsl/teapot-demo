@@ -1,10 +1,10 @@
 uniform vec3 lightColor;
 uniform vec3 ambientColor;
 uniform vec3 lightPosition;
+uniform float shininess;
 uniform float kA;
 uniform float kD;
 uniform float kS;
-uniform float shininess;
 
 varying vec3 vLight;
 varying vec3 vPosition;

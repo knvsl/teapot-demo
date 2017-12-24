@@ -1,3 +1,5 @@
+/** Setup **/
+
 // Renderer
 var renderer = new THREE.WebGLRenderer();
 document.body.appendChild( renderer.domElement );
@@ -32,8 +34,7 @@ var axesHelper = new THREE.AxesHelper( 3 );
 scene.add( axesHelper );
 
 // Light
-var lightColor = new THREE.Color( 1, 1, 1 );
-var light = new THREE.PointLight( lightColor );
+var light = new THREE.PointLight( 1, 1, 1 );
 light.position.set( 3, 3, 0 );
 scene.add( light );
 
@@ -43,41 +44,43 @@ var helperSize = 0.5;
 var lightHelper = new THREE.PointLightHelper( light, helperSize, helperColor);
 scene.add( lightHelper );
 
-// Object Properties
-/*
-  Phong : 0
-  BlinnPhong : 1
-*/
-var obj = {
+/** GUI Settings **/
+
+// Light Settings
+var lightColor = {
+  light : 0xFFFFFF,
+  ambient : 0x666666,
+};
+
+// Material Settings
+var material = {
+  shininess : 10.0,
+  kA : 0.4,
+  kD : 0.8,
+  kS : 0.8,
+  alphaX : 0.7,
+  alphaY : 0.1,
+};
+
+// Object Settings
+var settings = {
   rotate : false,
   shader : 0,
 };
 
-// Material Properties
-var material = {
-  ambientColor : new THREE.Color( 0.4, 0.4, 0.4 ),
-  kA : 0.4,
-  kS : 0.8,
-  kD : 0.8,
-  shininess : 10.0,
-  aX : 0.7,
-  aY : 0.1,
-};
-
-/* PHONG */
-
+/* PHONG Shader */
 var phongUniforms = {
-  lightColor : {type: "c", value: lightColor},
-  ambientColor : {type: "c", value: material.ambientColor},
-  lightPosition : {type: "v3", value: light.position},
-  kA : {type: "f", value: material.kA},
-  kD : {type: "f", value: material.kD},
-  kS : {type: "f", value: material.kS},
-  shininess : {type: "f", value: material.shininess}
+  lightColor : { type: "c", value: new THREE.Color( lightColor.light ) },
+  ambientColor : { type: "c", value: new THREE.Color( lightColor.ambient ) },
+  lightPosition : { type: "v3", value: light.position },
+  shininess : { type: "f", value: material.shininess },
+  kA : { type: "f", value: material.kA },
+  kD : { type: "f", value: material.kD },
+  kS : { type: "f", value: material.kS },
 };
 
 var phongMaterial = new THREE.ShaderMaterial({
-  uniforms: phongUniforms,
+  uniforms : phongUniforms,
 });
 
 var shaderFiles = [
@@ -93,10 +96,9 @@ var loader = new THREE.FileLoader();
      phongMaterial.fragmentShader = shader
    });
 
-/* Blinn-Phong */
-
+/* Blinn-Phong Shader*/
 var blinnPhongMaterial = new THREE.ShaderMaterial({
-  uniforms: phongUniforms,
+  uniforms : phongUniforms,
 });
 
 var shaderFiles = [
@@ -113,7 +115,7 @@ var loader = new THREE.FileLoader();
    });
 
 
-// Objects
+// Teapot Object
 var teapot;
 
 var loader = new THREE.OBJLoader();
@@ -135,20 +137,24 @@ loader.load('obj/teapot.obj', function(object) {
   teapot = scene.getObjectByName('teapot');
  });
 
-// DAT.GUI controls
+// DAT.GUI Controller
 var gui = new dat.GUI( { width : 500 } );
 
-var teapotControls = gui.addFolder('Uniforms');
-teapotControls.add(material, 'kA', 0, 1).name('Ambient Intensity');
-teapotControls.add(material, 'kS', 0, 1).name('Specular Intensity');
-teapotControls.add(material, 'kD', 0, 1).name('Diffuse Intensity');
-teapotControls.add(material, 'shininess', 0, 100).name('Shininess');
-teapotControls.open();
+// Object Controls
+var shaderControl = gui.add(settings, 'shader', { Phong : 0, BlinnPhong : 1 } ).name('Shader');
+gui.addColor(lightColor, 'light' ).name('Light Color');
+gui.addColor(lightColor, 'ambient' ).name('Ambient Color');
+gui.add(settings, 'rotate').name('Rotate');
 
-gui.add(obj, 'rotate').name('Rotate');
-var shaderControl = gui.add(obj, 'shader', { Phong : 0, BlinnPhong : 1 } ).name('Shader');
+// Phong/Blinn-Phong Controls
+var phongControls = gui.addFolder('Uniforms');
+  phongControls.add(material, 'shininess', 0, 100).name('Shininess');
+  phongControls.add(material, 'kA', 0, 1).name('Ambient Intensity');
+  phongControls.add(material, 'kS', 0, 1).name('Specular Intensity');
+  phongControls.add(material, 'kD', 0, 1).name('Diffuse Intensity');
 
-// Update Shader
+
+// Change shader
 shaderControl.onChange(function(shader) {
 
   switch (+shader) {
@@ -164,13 +170,15 @@ shaderControl.onChange(function(shader) {
 
 });
 
-// Update uniform values
+// Update Phong/Blinn-Phong uniforms
 function updatePhongUniforms() {
 
   phongUniforms.kA.value = material.kA;
   phongUniforms.kD.value = material.kD;
   phongUniforms.kS.value = material.kS;
   phongUniforms.shininess.value = material.shininess;
+  phongUniforms.lightColor.value = new THREE.Color( lightColor.light );
+  phongUniforms.ambientColor.value = new THREE.Color( lightColor.ambient );
 
   phongMaterial.needsUpdate = true;
   blinnPhongMaterial.needsUpdate = true;
@@ -193,7 +201,7 @@ function render() {
     updatePhongUniforms();
 
     // Rotate teapot
-    if(teapot && obj.rotate) {
+    if(teapot && settings.rotate) {
       teapot.rotation.x += 0.005;
       teapot.rotation.y += 0.005;
     }

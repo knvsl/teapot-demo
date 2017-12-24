@@ -55,13 +55,13 @@ var obj = {
 
 // Material Properties
 var material = {
-  shininess : 10.0,
-  kAmbient : 0.4,
-  kSpecular : 0.8,
-  kDiffuse : 0.8,
   ambientColor : new THREE.Color( 0.4, 0.4, 0.4 ),
-  alphaX : 0.7,
-  alphaY : 0.1,
+  kA : 0.4,
+  kS : 0.8,
+  kD : 0.8,
+  shininess : 10.0,
+  aX : 0.7,
+  aY : 0.1,
 };
 
 /* PHONG */
@@ -70,9 +70,9 @@ var phongUniforms = {
   lightColor : {type: "c", value: lightColor},
   ambientColor : {type: "c", value: material.ambientColor},
   lightPosition : {type: "v3", value: light.position},
-  kAmbient : {type: "f", value: material.kAmbient},
-  kDiffuse : {type: "f", value: material.kDiffuse},
-  kSpecular : {type: "f", value: material.kSpecular},
+  kA : {type: "f", value: material.kA},
+  kD : {type: "f", value: material.kD},
+  kS : {type: "f", value: material.kS},
   shininess : {type: "f", value: material.shininess}
 };
 
@@ -100,15 +100,15 @@ var blinnPhongMaterial = new THREE.ShaderMaterial({
 });
 
 var shaderFiles = [
-  'glsl/blinnphong.vs.glsl',
-  'glsl/blinnphong.fs.glsl',
+  'glsl/blinn_phong.vs.glsl',
+  'glsl/blinn_phong.fs.glsl',
 ];
 
 var loader = new THREE.FileLoader();
-   loader.load('glsl/blinnphong.vs.glsl', function(shader) {
+   loader.load('glsl/blinn_phong.vs.glsl', function(shader) {
      blinnPhongMaterial.vertexShader = shader
    });
-   loader.load('glsl/blinnphong.fs.glsl', function(shader) {
+   loader.load('glsl/blinn_phong.fs.glsl', function(shader) {
      blinnPhongMaterial.fragmentShader = shader
    });
 
@@ -139,10 +139,10 @@ loader.load('obj/teapot.obj', function(object) {
 var gui = new dat.GUI( { width : 500 } );
 
 var teapotControls = gui.addFolder('Uniforms');
+teapotControls.add(material, 'kA', 0, 1).name('Ambient Intensity');
+teapotControls.add(material, 'kS', 0, 1).name('Specular Intensity');
+teapotControls.add(material, 'kD', 0, 1).name('Diffuse Intensity');
 teapotControls.add(material, 'shininess', 0, 100).name('Shininess');
-teapotControls.add(material, 'kAmbient', 0, 1).name('Ambient Intensity');
-teapotControls.add(material, 'kSpecular', 0, 1).name('Specular Intensity');
-teapotControls.add(material, 'kDiffuse', 0, 1).name('Diffuse Intensity');
 teapotControls.open();
 
 gui.add(obj, 'rotate').name('Rotate');
@@ -167,10 +167,10 @@ shaderControl.onChange(function(shader) {
 // Update uniform values
 function updatePhongUniforms() {
 
+  phongUniforms.kA.value = material.kA;
+  phongUniforms.kD.value = material.kD;
+  phongUniforms.kS.value = material.kS;
   phongUniforms.shininess.value = material.shininess;
-  phongUniforms.kAmbient.value = material.kAmbient;
-  phongUniforms.kDiffuse.value = material.kDiffuse;
-  phongUniforms.kSpecular.value = material.kSpecular;
 
   phongMaterial.needsUpdate = true;
   blinnPhongMaterial.needsUpdate = true;

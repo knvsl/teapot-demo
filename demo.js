@@ -45,6 +45,9 @@ var lightHelper = new THREE.PointLightHelper( light, helperSize, helperColor);
 scene.add( lightHelper );
 
 /** GUI Settings **/
+const PHONG = 0;
+const BLINNPHONG = 1;
+const LAMBERTIAN = 2;
 
 // Light Settings
 var lightColor = {
@@ -65,10 +68,11 @@ var material = {
 // Object Settings
 var settings = {
   rotate : false,
-  shader : 0,
+  shader : PHONG,
 };
 
-/* PHONG Shader */
+/* Phong Shader */
+
 var phongUniforms = {
   lightColor : { type: "c", value: new THREE.Color( lightColor.light ) },
   ambientColor : { type: "c", value: new THREE.Color( lightColor.ambient ) },
@@ -97,6 +101,7 @@ var loader = new THREE.FileLoader();
    });
 
 /* Blinn-Phong Shader*/
+
 var blinnPhongMaterial = new THREE.ShaderMaterial({
   uniforms : phongUniforms,
 });
@@ -114,8 +119,32 @@ var loader = new THREE.FileLoader();
      blinnPhongMaterial.fragmentShader = shader
    });
 
+/* Lambertian Shader */
 
-// Teapot Object
+var lambertianUniforms = {
+  lightColor : { type: "c", value: new THREE.Color( lightColor.light ) },
+  lightPosition : { type: "v3", value: light.position },
+  kD : { type: "f", value: material.kD },
+};
+
+var lambertianMaterial = new THREE.ShaderMaterial({
+  uniforms : lambertianUniforms,
+});
+
+var shaderFiles = [
+  'glsl/lambertian.vs.glsl',
+  'glsl/lambertian.fs.glsl',
+];
+
+var loader = new THREE.FileLoader();
+   loader.load('glsl/lambertian.vs.glsl', function(shader) {
+     lambertianMaterial.vertexShader = shader
+   });
+   loader.load('glsl/lambertian.fs.glsl', function(shader) {
+     lambertianMaterial.fragmentShader = shader
+   });
+
+/* Teapot Object */
 var teapot;
 
 var loader = new THREE.OBJLoader();
@@ -137,22 +166,41 @@ loader.load('obj/teapot.obj', function(object) {
   teapot = scene.getObjectByName('teapot');
  });
 
-// DAT.GUI Controller
-var gui = new dat.GUI( { width : 500 } );
+/* DAT.GUI Controller */
 
-// Object Controls
-gui.add(settings, 'shader', { Phong : 0, BlinnPhong : 1 } ).name('Shader').onChange(changeShader);
-gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
-gui.addColor(lightColor, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
-gui.add(settings, 'rotate').name('Rotate');
+var gui;
+var currentShader = PHONG;
 
-// Phong/Blinn-Phong Controls
-var phongControls = gui.addFolder('Uniforms');
-  phongControls.add(material, 'shininess', 0, 100).name('Shininess').onChange(disableOrbit).onFinishChange(enableOrbit);
-  phongControls.add(material, 'kA', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-  phongControls.add(material, 'kS', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-  phongControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+// Phong/Blinn-Phing Controls
+function createPhongGui() {
 
+  gui = new dat.GUI( { width : 500 } );;
+  gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN } ).name('Shader').onChange(changeShader);
+  gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+  gui.addColor(lightColor, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+  gui.add(settings, 'rotate').name('Rotate');
+
+  var uniformControls = gui.addFolder('Uniforms');
+    uniformControls.add(material, 'shininess', 0, 100).name('Shininess').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(material, 'kA', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(material, 'kS', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+}
+
+// Lambertian Controls
+function createLambertianGui() {
+
+  gui = new dat.GUI( { width : 500 } );;
+  gui.add(settings, 'shader', { Phong : 0, BlinnPhong : 1, Lambertian : 2 } ).name('Shader').onChange(changeShader);
+  gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+  gui.add(settings, 'rotate').name('Rotate');
+
+  var uniformControls = gui.addFolder('Uniforms');
+    uniformControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+}
+
+// Create initial GUI
+createPhongGui();
 
 // Change shader
 function changeShader(shader) {
@@ -160,14 +208,27 @@ function changeShader(shader) {
   orbitControls.enabled = false;
 
   switch (+shader) {
-    case 0:
+    case PHONG: {
+      currentShader = PHONG;
       setMaterial(teapot, phongMaterial);
+      gui.destroy();
+      createPhongGui();
       break;
-    case 1:
+    }
+    case BLINNPHONG: {
+      currentShader = BLINNPHONG;
       setMaterial(teapot, blinnPhongMaterial);
+      gui.destroy();
+      createPhongGui();
       break;
-    default:
-      setMaterial(teapot, phongMaterial);
+    }
+    case LAMBERTIAN: {
+      currentShader = LAMBERTIAN;
+      setMaterial(teapot, lambertianMaterial);
+      gui.destroy();
+      createLambertianGui();
+      break;
+    }
   }
 
   orbitControls.enabled = true;
@@ -184,7 +245,7 @@ function enableOrbit() {
 }
 
 // Update Phong/Blinn-Phong uniforms
-function updatePhongUniforms() {
+function updatePhong() {
 
   phongUniforms.kA.value = material.kA;
   phongUniforms.kD.value = material.kD;
@@ -193,8 +254,14 @@ function updatePhongUniforms() {
   phongUniforms.lightColor.value = new THREE.Color( lightColor.light );
   phongUniforms.ambientColor.value = new THREE.Color( lightColor.ambient );
 
-  phongMaterial.needsUpdate = true;
-  blinnPhongMaterial.needsUpdate = true;
+}
+
+// Update lambertian uniforms
+function updateLambertian() {
+
+  lambertianUniforms.lightColor.value = new THREE.Color( lightColor.light );
+  lambertianUniforms.kD.value = material.kD;
+
 }
 
 // Set object material
@@ -206,12 +273,35 @@ function setMaterial (object, material) {
   });
 }
 
+// Update current shader's uniforms
+function updateUniforms() {
+
+  switch(currentShader) {
+    case PHONG: {
+      updatePhong();
+      phongMaterial.needsUpdate = true;
+      break;
+    }
+    case BLINNPHONG: {
+      updatePhong();
+      blinnPhongMaterial.needsUpdate = true;
+      break;
+    }
+    case LAMBERTIAN: {
+      updateLambertian();
+      lambertianMaterial.needsUpdate = true;
+      break;
+    }
+  }
+}
+
 // Render Scene
 function render() {
     window.requestAnimationFrame( render );
 
     orbitControls.update();
-    updatePhongUniforms();
+
+    updateUniforms();
 
     // Rotate teapot
     if(teapot && settings.rotate) {

@@ -24,10 +24,10 @@ camera.position.set(2,2,10);
 camera.lookAt( scene.position );
 
 // Controls
-controls = new THREE.OrbitControls(camera);
-controls.damping = 0.5;
-controls.autoRotate = false;
-controls.zoomSpeed = 0.1;
+orbitControls = new THREE.OrbitControls(camera);
+orbitControls.damping = 0.5;
+orbitControls.autoRotate = false;
+orbitControls.zoomSpeed = 0.1;
 
 // Axes Helper
 var axesHelper = new THREE.AxesHelper( 3 );
@@ -141,21 +141,23 @@ loader.load('obj/teapot.obj', function(object) {
 var gui = new dat.GUI( { width : 500 } );
 
 // Object Controls
-var shaderControl = gui.add(settings, 'shader', { Phong : 0, BlinnPhong : 1 } ).name('Shader');
-gui.addColor(lightColor, 'light' ).name('Light Color');
-gui.addColor(lightColor, 'ambient' ).name('Ambient Color');
+gui.add(settings, 'shader', { Phong : 0, BlinnPhong : 1 } ).name('Shader').onChange(changeShader);
+gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+gui.addColor(lightColor, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
 gui.add(settings, 'rotate').name('Rotate');
 
 // Phong/Blinn-Phong Controls
 var phongControls = gui.addFolder('Uniforms');
-  phongControls.add(material, 'shininess', 0, 100).name('Shininess');
-  phongControls.add(material, 'kA', 0, 1).name('Ambient Intensity');
-  phongControls.add(material, 'kS', 0, 1).name('Specular Intensity');
-  phongControls.add(material, 'kD', 0, 1).name('Diffuse Intensity');
+  phongControls.add(material, 'shininess', 0, 100).name('Shininess').onChange(disableOrbit).onFinishChange(enableOrbit);
+  phongControls.add(material, 'kA', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+  phongControls.add(material, 'kS', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+  phongControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
 
 
 // Change shader
-shaderControl.onChange(function(shader) {
+function changeShader(shader) {
+
+  orbitControls.enabled = false;
 
   switch (+shader) {
     case 0:
@@ -168,7 +170,18 @@ shaderControl.onChange(function(shader) {
       setMaterial(teapot, phongMaterial);
   }
 
-});
+  orbitControls.enabled = true;
+
+};
+
+// Disable and enable orbit controls when using GUI
+function disableOrbit() {
+  orbitControls.enabled = false;
+}
+
+function enableOrbit() {
+  orbitControls.enabled = true;
+}
 
 // Update Phong/Blinn-Phong uniforms
 function updatePhongUniforms() {
@@ -197,7 +210,7 @@ function setMaterial (object, material) {
 function render() {
     window.requestAnimationFrame( render );
 
-    controls.update();
+    orbitControls.update();
     updatePhongUniforms();
 
     // Rotate teapot

@@ -50,20 +50,11 @@ const BLINNPHONG = 1;
 const LAMBERTIAN = 2;
 const ANISOTROPHIC = 3;
 
+
 // Light Settings
-var lightColor = {
+var color = {
   light : 0xFFFFFF,
   ambient : 0x666666,
-};
-
-// Material Settings
-var material = {
-  shininess : 10.0,
-  kA : 0.4,
-  kD : 0.8,
-  kS : 0.8,
-  alphaX : 0.7,
-  alphaY : 0.1,
 };
 
 // Object Settings
@@ -72,16 +63,24 @@ var settings = {
   shader : PHONG,
 };
 
+// Material Settings
+var shininess = { type: 'f', value: 10.0 };
+var kA = { type: 'f', value: 0.4 };
+var kD = { type: 'f', value: 0.8 };
+var kS = { type: 'f', value: 0.8 };
+var alphaX = { type: 'f', value: 0.5 };
+var alphaY = { type: 'f', value: 0.1 };
+
 /* Phong Shader */
 
 var phongUniforms = {
-  lightColor : { type: 'c', value: new THREE.Color( lightColor.light ) },
-  ambientColor : { type: 'c', value: new THREE.Color( lightColor.ambient ) },
+  lightColor : { type: 'c', value: new THREE.Color( color.light )},
+  ambientColor : { type: 'c', value: new THREE.Color( color.ambient )},
   lightPosition : { type: 'v3', value: light.position },
-  shininess : { type: 'f', value: material.shininess },
-  kA : { type: 'f', value: material.kA },
-  kD : { type: 'f', value: material.kD },
-  kS : { type: 'f', value: material.kS },
+  shininess : shininess,
+  kA : kA,
+  kD : kD,
+  kS : kS,
 };
 
 var phongMaterial = new THREE.ShaderMaterial({
@@ -123,9 +122,9 @@ var loader = new THREE.FileLoader();
 /* Lambertian Shader */
 
 var lambertianUniforms = {
-  lightColor : { type: 'c', value: new THREE.Color( lightColor.light ) },
+  lightColor : { type: 'c', value: new THREE.Color( color.light )},
   lightPosition : { type: 'v3', value: light.position },
-  kD : { type: 'f', value: material.kD },
+  kD : kD,
 };
 
 var lambertianMaterial = new THREE.ShaderMaterial({
@@ -148,14 +147,15 @@ var loader = new THREE.FileLoader();
 /* Anisotrophic Shader */
 
 var anisotrophicUniforms = {
-  lightColor : { type: 'c', value: new THREE.Color( lightColor.light ) },
-  ambientColor : { type: 'c', value: new THREE.Color( lightColor.ambient ) },
+  lightColor : { type: 'c', value: new THREE.Color( color.light )},
+  ambientColor : { type: 'c', value: new THREE.Color( color.ambient )},
   lightPosition : { type: 'v3', value: light.position },
-  kA : { type: 'f', value: material.kA },
-  kD : { type: 'f', value: material.kD },
-  kS : { type: 'f', value: material.kS },
-  alphaX : { type: 'f', value: material.alphaX },
-  alphaY : { type: 'f', value: material.alphaY },
+  shininess : shininess,
+  kA : kA,
+  kD : kD,
+  kS : kS,
+  alphaX : alphaX,
+  alphaY : alphaY,
 };
 
 var anisotrophicMaterial = new THREE.ShaderMaterial({
@@ -213,21 +213,20 @@ var gui;
 var uniformControls;
 var currentShader = PHONG;
 
-// Create GUI Functions
 function createPhongGui() {
 
   gui = new dat.GUI( { width : 500 } );
     gui.add(settings, 'rotate').name('Rotate');
     gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(changeShader);
-    gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
-    gui.addColor(lightColor, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+    gui.addColor(color, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+    gui.addColor(color, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
 
 
   uniformControls = gui.addFolder('Uniforms');
-    uniformControls.add(material, 'shininess', 0, 100).name('Shininess').onChange(disableOrbit).onFinishChange(enableOrbit);
-    uniformControls.add(material, 'kA', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-    uniformControls.add(material, 'kS', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-    uniformControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(phongUniforms.shininess, 'value', 0, 100).name('Shininess').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(phongUniforms.kA, 'value', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(phongUniforms.kS, 'value', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(phongUniforms.kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
 }
 
 function createLambertianGui() {
@@ -235,10 +234,10 @@ function createLambertianGui() {
   gui = new dat.GUI( { width : 500 } );
     gui.add(settings, 'rotate').name('Rotate');
     gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(changeShader);
-    gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+    gui.addColor(color, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
 
   var uniformControls = gui.addFolder('Uniforms');
-    uniformControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(lambertianUniforms.kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
 }
 
 function createAnisotrophicGui() {
@@ -246,18 +245,17 @@ function createAnisotrophicGui() {
   gui = new dat.GUI( { width : 500 } );
     gui.add(settings, 'rotate').name('Rotate');
     gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(changeShader);
-    gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
-    gui.addColor(lightColor, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+    gui.addColor(color, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+    gui.addColor(color, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
 
   uniformControls = gui.addFolder('Uniforms');
-    uniformControls.add(material, 'kA', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-    uniformControls.add(material, 'kS', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-    uniformControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-    uniformControls.add(material, 'alphaX', 0, 1).name('X Width').onChange(disableOrbit).onFinishChange(enableOrbit);
-    uniformControls.add(material, 'alphaY', 0, 1).name('Y Width').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(anisotrophicUniforms.kA, 'value', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(anisotrophicUniforms.kS, 'value', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(anisotrophicUniforms.kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(anisotrophicUniforms.alphaX, 'value', 0, 1).name('X Width').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(anisotrophicUniforms.alphaY, 'value', 0, 1).name('Y Width').onChange(disableOrbit).onFinishChange(enableOrbit);
 }
 
-// Changing Shader Functions
 function changeShader(shader) {
 
   orbitControls.enabled = false;
@@ -305,57 +303,29 @@ function enableOrbit() {
   orbitControls.enabled = true;
 }
 
-// Update Uniform Functions
-function updatePhong() {
-
-  phongUniforms.kA.value = material.kA;
-  phongUniforms.kD.value = material.kD;
-  phongUniforms.kS.value = material.kS;
-  phongUniforms.shininess.value = material.shininess;
-  phongUniforms.lightColor.value = new THREE.Color( lightColor.light );
-  phongUniforms.ambientColor.value = new THREE.Color( lightColor.ambient );
-
-}
-
-function updateLambertian() {
-
-  lambertianUniforms.lightColor.value = new THREE.Color( lightColor.light );
-  lambertianUniforms.kD.value = material.kD;
-
-}
-
-function updateAnisotrophic() {
-
-  anisotrophicUniforms.kA.value = material.kA;
-  anisotrophicUniforms.kD.value = material.kD;
-  anisotrophicUniforms.kS.value = material.kS;
-  anisotrophicUniforms.lightColor.value = new THREE.Color( lightColor.light );
-  anisotrophicUniforms.ambientColor.value = new THREE.Color( lightColor.ambient );
-  anisotrophicUniforms.alphaX.value = material.alphaX;
-  anisotrophicUniforms.alphaY.value = material.alphaY;
-
-}
-
 function updateUniforms() {
 
   switch(currentShader) {
     case PHONG: {
-      updatePhong();
+      phongUniforms.lightColor.value = new THREE.Color( color.light );
+      phongUniforms.ambientColor.value = new THREE.Color( color.ambient );
       phongMaterial.needsUpdate = true;
       break;
     }
     case BLINNPHONG: {
-      updatePhong();
+      phongUniforms.lightColor.value = new THREE.Color( color.light );
+      phongUniforms.ambientColor.value = new THREE.Color( color.ambient );
       blinnPhongMaterial.needsUpdate = true;
       break;
     }
     case LAMBERTIAN: {
-      updateLambertian();
+      lambertianUniforms.lightColor.value = new THREE.Color( color.light );
       lambertianMaterial.needsUpdate = true;
       break;
     }
     case ANISOTROPHIC: {
-      updateAnisotrophic();
+      anisotrophicUniforms.lightColor.value = new THREE.Color( color.light );
+      anisotrophicUniforms.ambientColor.value = new THREE.Color( color.ambient );
       anisotrophicMaterial.needsUpdate = true;
       break;
     }

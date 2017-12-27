@@ -5,15 +5,6 @@ var renderer = new THREE.WebGLRenderer();
 document.body.appendChild( renderer.domElement );
 renderer.setClearColor(0xFFFFFF);
 
-// Resize window
-function resizeWindow() {
-
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-}
-
 window.addEventListener('resize', resizeWindow, false);
 
 var scene = new THREE.Scene();
@@ -39,15 +30,25 @@ light.position.set( 3, 3, 0 );
 scene.add( light );
 
 // Light Helper
-var helperColor = new THREE.Color( 1, 0.8, 0 );
+var helperColor = new THREE.Color( 0, 0, 0 );
 var helperSize = 0.5;
 var lightHelper = new THREE.PointLightHelper( light, helperSize, helperColor);
 scene.add( lightHelper );
 
+function resizeWindow() {
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+}
+
 /** GUI Settings **/
+
 const PHONG = 0;
 const BLINNPHONG = 1;
 const LAMBERTIAN = 2;
+const ANISOTROPHIC = 3;
 
 // Light Settings
 var lightColor = {
@@ -74,13 +75,13 @@ var settings = {
 /* Phong Shader */
 
 var phongUniforms = {
-  lightColor : { type: "c", value: new THREE.Color( lightColor.light ) },
-  ambientColor : { type: "c", value: new THREE.Color( lightColor.ambient ) },
-  lightPosition : { type: "v3", value: light.position },
-  shininess : { type: "f", value: material.shininess },
-  kA : { type: "f", value: material.kA },
-  kD : { type: "f", value: material.kD },
-  kS : { type: "f", value: material.kS },
+  lightColor : { type: 'c', value: new THREE.Color( lightColor.light ) },
+  ambientColor : { type: 'c', value: new THREE.Color( lightColor.ambient ) },
+  lightPosition : { type: 'v3', value: light.position },
+  shininess : { type: 'f', value: material.shininess },
+  kA : { type: 'f', value: material.kA },
+  kD : { type: 'f', value: material.kD },
+  kS : { type: 'f', value: material.kS },
 };
 
 var phongMaterial = new THREE.ShaderMaterial({
@@ -100,7 +101,7 @@ var loader = new THREE.FileLoader();
      phongMaterial.fragmentShader = shader
    });
 
-/* Blinn-Phong Shader*/
+/* Blinn-Phong Shader */
 
 var blinnPhongMaterial = new THREE.ShaderMaterial({
   uniforms : phongUniforms,
@@ -122,9 +123,9 @@ var loader = new THREE.FileLoader();
 /* Lambertian Shader */
 
 var lambertianUniforms = {
-  lightColor : { type: "c", value: new THREE.Color( lightColor.light ) },
-  lightPosition : { type: "v3", value: light.position },
-  kD : { type: "f", value: material.kD },
+  lightColor : { type: 'c', value: new THREE.Color( lightColor.light ) },
+  lightPosition : { type: 'v3', value: light.position },
+  kD : { type: 'f', value: material.kD },
 };
 
 var lambertianMaterial = new THREE.ShaderMaterial({
@@ -144,7 +145,38 @@ var loader = new THREE.FileLoader();
      lambertianMaterial.fragmentShader = shader
    });
 
-/* Teapot Object */
+/* Anisotrophic Shader */
+
+var anisotrophicUniforms = {
+  lightColor : { type: 'c', value: new THREE.Color( lightColor.light ) },
+  ambientColor : { type: 'c', value: new THREE.Color( lightColor.ambient ) },
+  lightPosition : { type: 'v3', value: light.position },
+  kA : { type: 'f', value: material.kA },
+  kD : { type: 'f', value: material.kD },
+  kS : { type: 'f', value: material.kS },
+  alphaX : { type: 'f', value: material.alphaX },
+  alphaY : { type: 'f', value: material.alphaY },
+};
+
+var anisotrophicMaterial = new THREE.ShaderMaterial({
+  uniforms : anisotrophicUniforms,
+});
+
+var shaderFiles = [
+  'glsl/anisotrophic.vs.glsl',
+  'glsl/anisotrophic.fs.glsl',
+];
+
+var loader = new THREE.FileLoader();
+   loader.load('glsl/anisotrophic.vs.glsl', function(shader) {
+     anisotrophicMaterial.vertexShader = shader
+   });
+   loader.load('glsl/anisotrophic.fs.glsl', function(shader) {
+     anisotrophicMaterial.fragmentShader = shader
+   });
+
+/* Object (teapot) */
+
 var teapot;
 
 var loader = new THREE.OBJLoader();
@@ -166,43 +198,63 @@ loader.load('obj/teapot.obj', function(object) {
   teapot = scene.getObjectByName('teapot');
  });
 
+// Set object's material
+function setMaterial (object, material) {
+  object.traverse(function(child) {
+    if (child instanceof THREE.Mesh){
+      child.material = material;
+    }
+  });
+}
+
 /* DAT.GUI Controller */
 
 var gui;
+var uniformControls;
 var currentShader = PHONG;
 
-// Phong/Blinn-Phing Controls
 function createPhongGui() {
 
   gui = new dat.GUI( { width : 500 } );;
-  gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN } ).name('Shader').onChange(changeShader);
-  gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
-  gui.addColor(lightColor, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
-  gui.add(settings, 'rotate').name('Rotate');
+    gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(changeShader);
+    gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+    gui.addColor(lightColor, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+    gui.add(settings, 'rotate').name('Rotate');
 
-  var uniformControls = gui.addFolder('Uniforms');
+  uniformControls = gui.addFolder('Uniforms');
     uniformControls.add(material, 'shininess', 0, 100).name('Shininess').onChange(disableOrbit).onFinishChange(enableOrbit);
     uniformControls.add(material, 'kA', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
     uniformControls.add(material, 'kS', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
     uniformControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
 }
 
-// Lambertian Controls
 function createLambertianGui() {
 
   gui = new dat.GUI( { width : 500 } );;
-  gui.add(settings, 'shader', { Phong : 0, BlinnPhong : 1, Lambertian : 2 } ).name('Shader').onChange(changeShader);
-  gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
-  gui.add(settings, 'rotate').name('Rotate');
+    gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(changeShader);
+    gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+    gui.add(settings, 'rotate').name('Rotate');
 
   var uniformControls = gui.addFolder('Uniforms');
     uniformControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
 }
 
-// Create initial GUI
-createPhongGui();
+function createAnisotrophicGui() {
 
-// Change shader
+  gui = new dat.GUI( { width : 500 } );;
+    gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(changeShader);
+    gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+    gui.addColor(lightColor, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
+    gui.add(settings, 'rotate').name('Rotate');
+
+  uniformControls = gui.addFolder('Uniforms');
+    uniformControls.add(material, 'kA', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(material, 'kS', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(material, 'alphaX', 0, 1).name('X Width').onChange(disableOrbit).onFinishChange(enableOrbit);
+    uniformControls.add(material, 'alphaY', 0, 1).name('Y Width').onChange(disableOrbit).onFinishChange(enableOrbit);
+}
+
 function changeShader(shader) {
 
   orbitControls.enabled = false;
@@ -229,13 +281,19 @@ function changeShader(shader) {
       createLambertianGui();
       break;
     }
+    case ANISOTROPHIC: {
+      currentShader = ANISOTROPHIC;
+      setMaterial(teapot, anisotrophicMaterial);
+      gui.destroy();
+      createAnisotrophicGui();
+      break;
+    }
   }
 
   orbitControls.enabled = true;
 
 };
 
-// Disable and enable orbit controls when using GUI
 function disableOrbit() {
   orbitControls.enabled = false;
 }
@@ -244,7 +302,6 @@ function enableOrbit() {
   orbitControls.enabled = true;
 }
 
-// Update Phong/Blinn-Phong uniforms
 function updatePhong() {
 
   phongUniforms.kA.value = material.kA;
@@ -256,7 +313,6 @@ function updatePhong() {
 
 }
 
-// Update lambertian uniforms
 function updateLambertian() {
 
   lambertianUniforms.lightColor.value = new THREE.Color( lightColor.light );
@@ -264,16 +320,18 @@ function updateLambertian() {
 
 }
 
-// Set object material
-function setMaterial (object, material) {
-  object.traverse(function(child) {
-    if (child instanceof THREE.Mesh){
-      child.material = material;
-    }
-  });
+function updateAnisotrophic() {
+
+  anisotrophicUniforms.kA.value = material.kA;
+  anisotrophicUniforms.kD.value = material.kD;
+  anisotrophicUniforms.kS.value = material.kS;
+  anisotrophicUniforms.lightColor.value = new THREE.Color( lightColor.light );
+  anisotrophicUniforms.ambientColor.value = new THREE.Color( lightColor.ambient );
+  anisotrophicUniforms.alphaX.value = material.alphaX;
+  anisotrophicUniforms.alphaY.value = material.alphaY;
+
 }
 
-// Update current shader's uniforms
 function updateUniforms() {
 
   switch(currentShader) {
@@ -290,6 +348,11 @@ function updateUniforms() {
     case LAMBERTIAN: {
       updateLambertian();
       lambertianMaterial.needsUpdate = true;
+      break;
+    }
+    case ANISOTROPHIC: {
+      updateAnisotrophic();
+      anisotrophicMaterial.needsUpdate = true;
       break;
     }
   }
@@ -313,4 +376,5 @@ function render() {
 }
 
 resizeWindow();
+createPhongGui();
 render();

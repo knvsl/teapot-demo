@@ -213,13 +213,15 @@ var gui;
 var uniformControls;
 var currentShader = PHONG;
 
+// Create GUI Functions
 function createPhongGui() {
 
-  gui = new dat.GUI( { width : 500 } );;
+  gui = new dat.GUI( { width : 500 } );
+    gui.add(settings, 'rotate').name('Rotate');
     gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(changeShader);
     gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
     gui.addColor(lightColor, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
-    gui.add(settings, 'rotate').name('Rotate');
+
 
   uniformControls = gui.addFolder('Uniforms');
     uniformControls.add(material, 'shininess', 0, 100).name('Shininess').onChange(disableOrbit).onFinishChange(enableOrbit);
@@ -230,10 +232,10 @@ function createPhongGui() {
 
 function createLambertianGui() {
 
-  gui = new dat.GUI( { width : 500 } );;
+  gui = new dat.GUI( { width : 500 } );
+    gui.add(settings, 'rotate').name('Rotate');
     gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(changeShader);
     gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
-    gui.add(settings, 'rotate').name('Rotate');
 
   var uniformControls = gui.addFolder('Uniforms');
     uniformControls.add(material, 'kD', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
@@ -241,11 +243,11 @@ function createLambertianGui() {
 
 function createAnisotrophicGui() {
 
-  gui = new dat.GUI( { width : 500 } );;
+  gui = new dat.GUI( { width : 500 } );
+    gui.add(settings, 'rotate').name('Rotate');
     gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(changeShader);
     gui.addColor(lightColor, 'light' ).name('Light Color').onChange(disableOrbit).onFinishChange(enableOrbit);
     gui.addColor(lightColor, 'ambient' ).name('Ambient Color').onChange(disableOrbit).onFinishChange(enableOrbit);
-    gui.add(settings, 'rotate').name('Rotate');
 
   uniformControls = gui.addFolder('Uniforms');
     uniformControls.add(material, 'kA', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
@@ -255,6 +257,7 @@ function createAnisotrophicGui() {
     uniformControls.add(material, 'alphaY', 0, 1).name('Y Width').onChange(disableOrbit).onFinishChange(enableOrbit);
 }
 
+// Changing Shader Functions
 function changeShader(shader) {
 
   orbitControls.enabled = false;
@@ -302,6 +305,7 @@ function enableOrbit() {
   orbitControls.enabled = true;
 }
 
+// Update Uniform Functions
 function updatePhong() {
 
   phongUniforms.kA.value = material.kA;

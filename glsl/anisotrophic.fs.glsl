@@ -1,5 +1,7 @@
 uniform vec3 lightColor;
 uniform vec3 ambientColor;
+uniform vec3 diffuseColor;
+uniform vec3 specularColor;
 uniform vec3 lightPosition;
 uniform float kA;
 uniform float kD;
@@ -33,7 +35,7 @@ void main() {
 
 	// Diffuse
 	float diffuse = max(0.0, dot(l,n));
-	vec3 diffuseLight = kD * lightColor * diffuse;
+	vec3 diffuseLight = kD * diffuseColor * diffuse * lightColor;
 
 
 	// dot products
@@ -46,7 +48,7 @@ void main() {
 	// Specular (Ward's Model)
 	float specular = sqrt(max(ln/vn, 0.0))
 									 * exp(-2.0 * (pow(ht/alphaX, 2.0) + pow(hb/alphaY, 2.0)) / (1.0 + hn));
-	vec3 specularLight = kS * lightColor * specular;
+	vec3 specularLight = kS * specularColor * specular * lightColor;
 
 	// Total Light
 	vec3 totalLight = ambientLight + diffuseLight + specularLight;

@@ -1,5 +1,7 @@
 uniform vec3 lightColor;
 uniform vec3 ambientColor;
+uniform vec3 diffuseColor;
+uniform vec3 specularColor;
 uniform vec3 lightPosition;
 uniform float shininess;
 uniform float kA;
@@ -25,11 +27,11 @@ void main() {
 
 	// Diffuse
 	float diffuse = max(0.0, dot(l,n));
-	vec3 diffuseLight = kD * lightColor * diffuse;
+	vec3 diffuseLight = kD * diffuseColor * diffuse * lightColor;
 
 	// Specular
 	float specular = pow(max(0.0, dot(b,v)), shininess);
-	vec3 specularLight = kS * lightColor * specular;
+	vec3 specularLight = kS * specularColor * specular * lightColor;
 
 	// Total Light
 	vec3 totalLight = ambientLight + diffuseLight + specularLight;

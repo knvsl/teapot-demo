@@ -1,4 +1,5 @@
 uniform vec3 lightColor;
+uniform vec3 diffuseColor;
 uniform vec3 lightPosition;
 uniform float kD;
 

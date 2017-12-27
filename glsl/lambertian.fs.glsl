@@ -1,4 +1,5 @@
 uniform vec3 lightColor;
+uniform vec3 diffuseColor;
 uniform vec3 lightPosition;
 uniform float kD;
 
@@ -13,7 +14,7 @@ void main() {
 
 	// Diffuse
 	float diffuse = max(0.0, dot(l,n));
-	vec3 diffuseLight = kD * lightColor * diffuse;
+	vec3 diffuseLight = kD * diffuseColor * diffuse * lightColor;
 
 	// Total Light
 	vec3 totalLight = diffuseLight;

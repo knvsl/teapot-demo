@@ -1,4 +1,4 @@
-/* DAT.GUI Setup */
+/* DAT.GUI Controllers */
 
 var gui;
 var currentShader = PHONG;
@@ -12,9 +12,9 @@ function createPhongGUI() {
     gui.addColor(phongUniforms.lightColor.value, 'r' ).name('Light Color').onChange(updateLightColor);
 
   var uniforms = gui.addFolder('Uniforms');
-    uniforms.addColor(phongUniforms.ambientColor.value, 'r' ).name('Ambient Color').onChange(updateAmbientColor);
-    uniforms.addColor(phongUniforms.diffuseColor.value, 'r' ).name('Diffuse Color').onChange(updateDiffuseColor);
-    uniforms.addColor(phongUniforms.specularColor.value, 'r' ).name('Specular Color').onChange(updateSpecularColor);
+    uniforms.addColor(phongUniforms.ambientColor.value, 'r' ).name('Ambient Color').onChange(updateAmbientColor).onFinishChange(enableOrbit);
+    uniforms.addColor(phongUniforms.diffuseColor.value, 'r' ).name('Diffuse Color').onChange(updateDiffuseColor).onFinishChange(enableOrbit);
+    uniforms.addColor(phongUniforms.specularColor.value, 'r' ).name('Specular Color').onChange(updateSpecularColor).onFinishChange(enableOrbit);
     uniforms.add(phongUniforms.shininess, 'value', 0, 100).name('Shininess').onChange(disableOrbit).onFinishChange(enableOrbit);
     uniforms.add(phongUniforms.kA, 'value', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
     uniforms.add(phongUniforms.kS, 'value', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
@@ -32,7 +32,7 @@ function createLambertianGUI() {
     gui.addColor(lambertianUniforms.lightColor.value, 'r' ).name('Light Color').onChange(updateLightColor);
 
   var uniforms = gui.addFolder('Uniforms');
-    uniforms.addColor(lambertianUniforms.diffuseColor.value, 'r' ).name('Diffuse Color').onChange(updateDiffuseColor);
+    uniforms.addColor(lambertianUniforms.diffuseColor.value, 'r' ).name('Diffuse Color').onChange(updateDiffuseColor).onFinishChange(enableOrbit);
     uniforms.add(lambertianUniforms.kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
 
     gui.add(defaults, 'reset').name('RESET').onChange(refreshDisplay);
@@ -46,10 +46,10 @@ function createAnisotrophicGUI() {
     gui.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(updateShader);
     gui.addColor(anisotrophicUniforms.lightColor.value, 'r' ).name('Light Color').onChange(updateLightColor);
 
-  var uniformControls = gui.addFolder('Uniforms');
-    uniforms.addColor(anisotrophicUniforms.ambientColor.value, 'r' ).name('Ambient Color').onChange(updateAmbientColor);
-    uniforms.addColor(anisotrophicUniforms.diffuseColor.value, 'r' ).name('Diffuse Color').onChange(updateDiffuseColor);
-    uniforms.addColor(anisotrophicUniforms.specularColor.value, 'r' ).name('Specular Color').onChange(updateSpecularColor);
+  var uniforms = gui.addFolder('Uniforms');
+    uniforms.addColor(anisotrophicUniforms.ambientColor.value, 'r' ).name('Ambient Color').onChange(updateAmbientColor).onFinishChange(enableOrbit);
+    uniforms.addColor(anisotrophicUniforms.diffuseColor.value, 'r' ).name('Diffuse Color').onChange(updateDiffuseColor).onFinishChange(enableOrbit);
+    uniforms.addColor(anisotrophicUniforms.specularColor.value, 'r' ).name('Specular Color').onChange(updateSpecularColor).onFinishChange(enableOrbit);
     uniforms.add(anisotrophicUniforms.kA, 'value', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
     uniforms.add(anisotrophicUniforms.kS, 'value', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
     uniforms.add(anisotrophicUniforms.kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
@@ -82,25 +82,21 @@ function refreshDisplay() {
 function updateLightColor(color) {
   orbitControls.enabled = false;
   lightColor.value = new THREE.Color ( color );
-  orbitControls.enabled = true;
 }
 
 function updateAmbientColor(color){
   orbitControls.enabled = false;
   ambientColor.value = new THREE.Color ( color );
-  orbitControls.enabled = true;
 }
 
 function updateDiffuseColor(color) {
   orbitControls.enabled = false;
   diffuseColor.value = new THREE.Color ( color );
-  orbitControls.enabled = true;
 }
 
 function updateSpecularColor(color){
   orbitControls.enabled = false;
   specularColor.value = new THREE.Color ( color );
-  orbitControls.enabled = true;
 }
 
 // Enable/Disable Orbit controls when using GUI
@@ -154,6 +150,8 @@ function updateShader(shader) {
 
 // Update Materials
 function updateMaterials() {
+
+  skyboxMaterial.needsUpdate = true
 
   switch(currentShader) {
     case PHONG: {

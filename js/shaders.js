@@ -1,3 +1,5 @@
+/* Shaders */
+
 // Light Uniforms
 var lightColor = { type: 'c', value: new THREE.Color( 0xFFFFFF ) };
 var ambientColor = { type: 'c', value: new THREE.Color( 0x555555 ) };
@@ -11,6 +13,32 @@ var kD = { type: 'f', value: 0.8 };
 var kS = { type: 'f', value: 0.8 };
 var alphaX = { type: 'f', value: 0.5 };
 var alphaY = { type: 'f', value: 0.1 };
+
+// Cubemap Uniforms
+var cubemap = new THREE.CubeTextureLoader()
+  .setPath( 'img/deception_pass/' )
+  .load( [
+    'deception_pass_ft.png', 'deception_pass_bk.png',
+    'deception_pass_up.png', 'deception_pass_dn.png',
+    'deception_pass_rt.png', 'deception_pass_lf.png'
+  ] );
+
+/* SKYBOX */
+
+var skyboxMaterial = new THREE.ShaderMaterial({
+	uniforms: {
+		skybox: { type: "t", value: cubemap },
+	},
+    side: THREE.DoubleSide
+})
+
+var loader = new THREE.FileLoader();
+   loader.load('glsl/skybox.vs.glsl', function(shader) {
+     skyboxMaterial.vertexShader = shader
+   });
+   loader.load('glsl/skybox.fs.glsl', function(shader) {
+     skyboxMaterial.fragmentShader = shader
+   });
 
 /* PHONG */
 
@@ -30,11 +58,6 @@ var phongMaterial = new THREE.ShaderMaterial({
   uniforms : phongUniforms,
 });
 
-var shaderFiles = [
-  'glsl/phong.vs.glsl',
-  'glsl/phong.fs.glsl',
-];
-
 var loader = new THREE.FileLoader();
    loader.load('glsl/phong.vs.glsl', function(shader) {
      phongMaterial.vertexShader = shader
@@ -48,11 +71,6 @@ var loader = new THREE.FileLoader();
 var blinnPhongMaterial = new THREE.ShaderMaterial({
   uniforms : phongUniforms,
 });
-
-var shaderFiles = [
-  'glsl/blinn_phong.vs.glsl',
-  'glsl/blinn_phong.fs.glsl',
-];
 
 var loader = new THREE.FileLoader();
    loader.load('glsl/blinn_phong.vs.glsl', function(shader) {
@@ -74,11 +92,6 @@ var lambertianUniforms = {
 var lambertianMaterial = new THREE.ShaderMaterial({
   uniforms : lambertianUniforms,
 });
-
-var shaderFiles = [
-  'glsl/lambertian.vs.glsl',
-  'glsl/lambertian.fs.glsl',
-];
 
 var loader = new THREE.FileLoader();
    loader.load('glsl/lambertian.vs.glsl', function(shader) {
@@ -107,11 +120,6 @@ var anisotrophicUniforms = {
 var anisotrophicMaterial = new THREE.ShaderMaterial({
   uniforms : anisotrophicUniforms,
 });
-
-var shaderFiles = [
-  'glsl/anisotrophic.vs.glsl',
-  'glsl/anisotrophic.fs.glsl',
-];
 
 var loader = new THREE.FileLoader();
    loader.load('glsl/anisotrophic.vs.glsl', function(shader) {

@@ -4,14 +4,13 @@ document.body.appendChild( renderer.domElement );
 renderer.setClearColor(0xFFFFFF);
 
 function resizeWindow() {
-
   renderer.setSize(window.innerWidth, window.innerHeight);
-
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 }
 
 window.addEventListener('resize', resizeWindow, false);
+window.onscroll = function() { window.scrollTo(0, 0); }
 
 var scene = new THREE.Scene();
 
@@ -41,8 +40,12 @@ var helperSize = 0.5;
 var lightHelper = new THREE.PointLightHelper( light, helperSize, helperColor);
 scene.add( lightHelper );
 
-// Load Object (teapot)
+// SKYBOX
+var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+scene.add(skybox)
 
+// Load Object
 var teapot;
 
 var loader = new THREE.OBJLoader();
@@ -66,11 +69,11 @@ loader.load('obj/teapot.obj', function(object) {
 
 // Render Scene
 function render() {
-    window.requestAnimationFrame( render );
 
     orbitControls.update();
-
     updateMaterials();
+
+    window.requestAnimationFrame( render );
 
     // Rotate teapot
     if(teapot && settings.rotate) {

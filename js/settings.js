@@ -1,3 +1,5 @@
+/* Demo Settings */
+
 // Shader Options
 const PHONG = 0;
 const BLINNPHONG = 1;

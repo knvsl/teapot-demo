@@ -1,18 +1,18 @@
 /* Shaders */
 
 // Light Uniforms
-var lightColor = { type: 'c', value: new THREE.Color( 0xFFFFFF ) };
-var ambientColor = { type: 'c', value: new THREE.Color( 0x555555 ) };
-var diffuseColor = { type: 'c', value: new THREE.Color( 0xFFFFFF ) };
-var specularColor = { type: 'c', value: new THREE.Color( 0xFFFFFF ) };
+var lightColor = { type: 'c', value: new THREE.Color( color.light ) };
+var ambientColor = { type: 'c', value: new THREE.Color( color.ambient ) };
+var diffuseColor = { type: 'c', value: new THREE.Color( color.diffuse ) };
+var specularColor = { type: 'c', value: new THREE.Color( color.specular ) };
 
 // Material Uniforms
-var shininess = { type: 'f', value: 10.0 };
-var kA = { type: 'f', value: 0.4 };
-var kD = { type: 'f', value: 0.8 };
-var kS = { type: 'f', value: 0.8 };
-var alphaX = { type: 'f', value: 0.5 };
-var alphaY = { type: 'f', value: 0.1 };
+var shininess = { type: 'f', value: defaults.shininess };
+var kA = { type: 'f', value: defaults.kA };
+var kD = { type: 'f', value: defaults.kD };
+var kS = { type: 'f', value: defaults.kS };
+var alphaX = { type: 'f', value: defaults.alphaX };
+var alphaY = { type: 'f', value: defaults.alphaY };
 
 // Cubemap Uniforms
 var cubemap = new THREE.CubeTextureLoader()
@@ -68,8 +68,20 @@ var loader = new THREE.FileLoader();
 
 /* BLINN-PHONG */
 
+var blinnPhongUniforms = {
+  lightColor : lightColor,
+  ambientColor : ambientColor,
+  diffuseColor : diffuseColor,
+  specularColor : specularColor,
+  lightPosition : lightPosition,
+  shininess : shininess,
+  kA : kA,
+  kD : kD,
+  kS : kS,
+};
+
 var blinnPhongMaterial = new THREE.ShaderMaterial({
-  uniforms : phongUniforms,
+  uniforms : blinnPhongUniforms,
 });
 
 var loader = new THREE.FileLoader();
@@ -82,7 +94,7 @@ var loader = new THREE.FileLoader();
 
 /* LAMBERTIAN */
 
-var lambertianUniforms = {
+var lambertUniforms = {
   lightColor : lightColor,
   diffuseColor : diffuseColor,
   lightPosition : lightPosition,
@@ -90,7 +102,7 @@ var lambertianUniforms = {
 };
 
 var lambertianMaterial = new THREE.ShaderMaterial({
-  uniforms : lambertianUniforms,
+  uniforms : lambertUniforms,
 });
 
 var loader = new THREE.FileLoader();
@@ -103,7 +115,7 @@ var loader = new THREE.FileLoader();
 
 /* ANISOTROPHIC */
 
-var anisotrophicUniforms = {
+var anisoUniforms = {
   lightColor : lightColor,
   ambientColor : ambientColor,
   diffuseColor : diffuseColor,
@@ -118,7 +130,7 @@ var anisotrophicUniforms = {
 };
 
 var anisotrophicMaterial = new THREE.ShaderMaterial({
-  uniforms : anisotrophicUniforms,
+  uniforms : anisoUniforms,
 });
 
 var loader = new THREE.FileLoader();

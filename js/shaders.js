@@ -28,9 +28,9 @@ var cubemap = new THREE.CubeTextureLoader()
 ////////////
 
 var skyboxMaterial = new THREE.ShaderMaterial({
-	uniforms: {
-		skybox: { type: "t", value: cubemap },
-	},
+  uniforms: {
+    skybox: { type: "t", value: cubemap },
+  },
   side: THREE.DoubleSide
 })
 

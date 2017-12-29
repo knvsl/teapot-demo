@@ -6,6 +6,7 @@ const BLINNPHONG = 1;
 const LAMBERTIAN = 2;
 const ANISOTROPHIC = 3;
 const REFLECTION = 4;
+const REFRACTION = 5;
 
 // Object Settings
 var settings = {
@@ -40,3 +41,12 @@ var color = {
 
 // Background Color
 var backgroundColor = new THREE.Color( 0xF2F3F4 );
+
+// Cubemap 
+var cubemap = new THREE.CubeTextureLoader()
+  .setPath( 'img/deception_pass/' )
+  .load( [
+    'deception_pass_ft.png', 'deception_pass_bk.png',
+    'deception_pass_up.png', 'deception_pass_dn.png',
+    'deception_pass_rt.png', 'deception_pass_lf.png'
+  ] );

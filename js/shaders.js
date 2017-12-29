@@ -14,15 +14,6 @@ var kS = { type: 'f', value: defaults.kS };
 var alphaX = { type: 'f', value: defaults.alphaX };
 var alphaY = { type: 'f', value: defaults.alphaY };
 
-// Cubemap Uniforms
-var cubemap = new THREE.CubeTextureLoader()
-  .setPath( 'img/deception_pass/' )
-  .load( [
-    'deception_pass_ft.png', 'deception_pass_bk.png',
-    'deception_pass_up.png', 'deception_pass_dn.png',
-    'deception_pass_rt.png', 'deception_pass_lf.png'
-  ] );
-
 ////////////
 // SKYBOX //
 ////////////
@@ -169,3 +160,23 @@ var loader = new THREE.FileLoader();
       loader.load('glsl/reflection.fs.glsl', function(shader) {
         reflectionMaterial.fragmentShader = shader
       });
+
+
+////////////////
+// REFRACTION //
+////////////////
+
+var refractionMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    skybox: { type: "t", value: cubemap },
+  },
+  side: THREE.DoubleSide
+})
+
+var loader = new THREE.FileLoader();
+   loader.load('glsl/refraction.vs.glsl', function(shader) {
+     refractionMaterial.vertexShader = shader
+   });
+   loader.load('glsl/refraction.fs.glsl', function(shader) {
+     refractionMaterial.fragmentShader = shader
+   });

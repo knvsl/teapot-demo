@@ -1,7 +1,8 @@
 // Renderer
+var canvas = document.getElementById('canvas');
 var renderer = new THREE.WebGLRenderer();
 renderer.setClearColor(0xFFFFFF);
-document.body.appendChild( renderer.domElement );
+canvas.appendChild(renderer.domElement);
 
 function resizeWindow() {
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -12,6 +13,7 @@ function resizeWindow() {
 window.addEventListener('resize', resizeWindow, false);
 window.onscroll = function() { window.scrollTo(0, 0); }
 
+// Scene
 var scene = new THREE.Scene();
 scene.background = backgroundColor;
 
@@ -38,7 +40,6 @@ light.position.set( 3, 3, 0 );
 scene.add( light );
 
 // SKYBOX
-// TODO: skybox picker, simple thumbnail display onclick?
 var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
 var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
 scene.add(skybox)

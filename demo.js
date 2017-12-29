@@ -72,19 +72,19 @@ loader.load('obj/teapot.obj', function(object) {
 
 // Render Scene
 function render() {
+  
+  // Rotate teapot
+  if(teapot && settings.rotate) {
+    teapot.rotation.x += 0.005;
+    teapot.rotation.y += 0.005;
+  }
 
-    orbitControls.update();
-    updateMaterials(currentMaterial);
+  orbitControls.update();
+  updateMaterials(currentShader.material);
 
-    window.requestAnimationFrame( render );
+  window.requestAnimationFrame( render );
 
-    // Rotate teapot
-    if(teapot && settings.rotate) {
-      teapot.rotation.x += 0.005;
-      teapot.rotation.y += 0.005;
-    }
-
-    renderer.render( scene, camera );
+  renderer.render( scene, camera );
 }
 
 resizeWindow();

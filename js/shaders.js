@@ -150,3 +150,22 @@ var loader = new THREE.FileLoader();
    loader.load('glsl/anisotrophic.fs.glsl', function(shader) {
      anisotrophicMaterial.fragmentShader = shader
    });
+
+   ////////////////
+   // REFLECTION //
+   ////////////////
+
+   var reflectionMaterial = new THREE.ShaderMaterial({
+     uniforms: {
+       skybox: { type: "t", value: cubemap },
+     },
+     side: THREE.DoubleSide
+   })
+
+   var loader = new THREE.FileLoader();
+      loader.load('glsl/reflection.vs.glsl', function(shader) {
+        reflectionMaterial.vertexShader = shader
+      });
+      loader.load('glsl/reflection.fs.glsl', function(shader) {
+        reflectionMaterial.fragmentShader = shader
+      });

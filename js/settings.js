@@ -5,11 +5,13 @@ const PHONG = 0;
 const BLINNPHONG = 1;
 const LAMBERTIAN = 2;
 const ANISOTROPHIC = 3;
+const REFLECTION = 4;
 
 // Object Settings
 var settings = {
   rotate : false,
   shader : PHONG,
+  //skybox : false,
 };
 
 // Default Uniform Values

@@ -30,7 +30,7 @@ var resetButton = {
 var phongGUI = new dat.GUI( { width : 500 } );
   phongGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
   phongGUI.add(settings, 'rotate').name('Rotate');
-  phongGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(updateShader).listen();
+  phongGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic : ANISOTROPHIC, Reflection : REFLECTION } ).name('Shader').onChange(updateShader).listen();
   phongGUI.addColor(color, 'light' ).name('Light Color').onChange(updateLightColor).onFinishChange(enableOrbit);
   phongGUI.add(lightPosition.value, 'x', -10, 10).name('Light X').onChange(disableOrbit).onFinishChange(enableOrbit);
 
@@ -49,7 +49,7 @@ var uniforms = phongGUI.addFolder('Uniforms');
 var lambertGUI = new dat.GUI( { width : 500 } );
   lambertGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
   lambertGUI.add(settings, 'rotate').name('Rotate');
-  lambertGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(updateShader).listen();
+  lambertGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic : ANISOTROPHIC } ).name('Shader').onChange(updateShader).listen();
   lambertGUI.addColor(color, 'light' ).name('Light Color').onChange(updateLightColor).onFinishChange(enableOrbit);
 
 // Uniforms Folder
@@ -65,7 +65,7 @@ lambertGUI.domElement.style.display = 'none';
 var anisoGUI = new dat.GUI( { width : 500 } );
   anisoGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
   anisoGUI.add(settings, 'rotate').name('Rotate');
-  anisoGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(updateShader).listen();
+  anisoGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic : ANISOTROPHIC } ).name('Shader').onChange(updateShader).listen();
   anisoGUI.addColor(color, 'light' ).name('Light Color').onChange(updateLightColor).onFinishChange(enableOrbit);
 
 // Uniforms Folder
@@ -143,11 +143,13 @@ var phong = new shader(phongMaterial, phongGUI);
 var blinnPhong = new shader(blinnPhongMaterial, phongGUI);
 var lambertian = new shader(lambertianMaterial, lambertGUI);
 var anisotrophic = new shader(anisotrophicMaterial, anisoGUI);
+var reflection = new shader(reflectionMaterial, lambertGUI); // just for testing change gui later
 
 shaders[PHONG] = phong;
 shaders[BLINNPHONG] = blinnPhong;
 shaders[LAMBERTIAN] = lambertian;
 shaders[ANISOTROPHIC] = anisotrophic;
+shaders[REFLECTION] = reflection;
 
 var currentShader = phong;
 

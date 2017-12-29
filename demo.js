@@ -30,9 +30,15 @@ orbitControls.zoomSpeed = 0.1;
 var axesHelper = new THREE.AxesHelper( 3 );
 scene.add( axesHelper );
 
-// TODO: Replace light with movable sphere
+// TODO: Make movable, color reflects lightcolor
+var lightGeometry = new THREE.SphereGeometry( 0.5, 3, 3 );
+var lightMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } );
+var light = new THREE.Mesh( lightGeometry, lightMaterial );
+light.position.set( 3, 3, 0 );
+scene.add( light );
 
 // SKYBOX
+// TODO: skybox picker, simple thumbnail display onclick?
 var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
 var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
 //scene.add(skybox)

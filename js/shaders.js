@@ -31,7 +31,7 @@ var skyboxMaterial = new THREE.ShaderMaterial({
 	uniforms: {
 		skybox: { type: "t", value: cubemap },
 	},
-    side: THREE.DoubleSide
+  side: THREE.DoubleSide
 })
 
 var loader = new THREE.FileLoader();

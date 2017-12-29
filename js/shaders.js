@@ -23,13 +23,15 @@ var cubemap = new THREE.CubeTextureLoader()
     'deception_pass_rt.png', 'deception_pass_lf.png'
   ] );
 
-/* SKYBOX */
+////////////
+// SKYBOX //
+////////////
 
 var skyboxMaterial = new THREE.ShaderMaterial({
-	uniforms: {
-		skybox: { type: "t", value: cubemap },
-	},
-    side: THREE.DoubleSide
+  uniforms: {
+    skybox: { type: "t", value: cubemap },
+  },
+  side: THREE.DoubleSide
 })
 
 var loader = new THREE.FileLoader();
@@ -40,7 +42,9 @@ var loader = new THREE.FileLoader();
      skyboxMaterial.fragmentShader = shader
    });
 
-/* PHONG */
+///////////
+// PHONG //
+///////////
 
 var phongUniforms = {
   lightColor : lightColor,
@@ -66,7 +70,9 @@ var loader = new THREE.FileLoader();
      phongMaterial.fragmentShader = shader
    });
 
-/* BLINN-PHONG */
+/////////////////
+// BLINN-PHONG //
+/////////////////
 
 var blinnPhongUniforms = {
   lightColor : lightColor,
@@ -92,7 +98,9 @@ var loader = new THREE.FileLoader();
      blinnPhongMaterial.fragmentShader = shader
    });
 
-/* LAMBERTIAN */
+////////////////
+// LAMBERTIAN //
+////////////////
 
 var lambertUniforms = {
   lightColor : lightColor,
@@ -113,7 +121,9 @@ var loader = new THREE.FileLoader();
      lambertianMaterial.fragmentShader = shader
    });
 
-/* ANISOTROPHIC */
+//////////////////
+// ANISOTROPHIC //
+//////////////////
 
 var anisoUniforms = {
   lightColor : lightColor,

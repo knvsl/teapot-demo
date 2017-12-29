@@ -30,20 +30,15 @@ orbitControls.zoomSpeed = 0.1;
 var axesHelper = new THREE.AxesHelper( 3 );
 scene.add( axesHelper );
 
-// TODO: Replace with movable sphere
-/* Light
-var light = new THREE.PointLight( 1, 1, 1 );
+// TODO: Make movable, color reflects lightcolor
+var lightGeometry = new THREE.SphereGeometry( 0.5, 3, 3 );
+var lightMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } );
+var light = new THREE.Mesh( lightGeometry, lightMaterial );
 light.position.set( 3, 3, 0 );
 scene.add( light );
 
-// Light Helper
-var helperColor = new THREE.Color( 0, 0, 0 );
-var helperSize = 0.5;
-var lightHelper = new THREE.PointLightHelper( light, helperSize, helperColor);
-scene.add( lightHelper );
-*/
-
 // SKYBOX
+// TODO: skybox picker, simple thumbnail display onclick?
 var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
 var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
 scene.add(skybox)
@@ -72,19 +67,19 @@ loader.load('obj/teapot.obj', function(object) {
 
 // Render Scene
 function render() {
-  
+
   // Rotate teapot
   if(teapot && settings.rotate) {
     teapot.rotation.x += 0.005;
     teapot.rotation.y += 0.005;
   }
 
-  orbitControls.update();
-  updateMaterials(currentShader.material);
+    orbitControls.update();
+    updateMaterials(currentShader.material);
 
-  window.requestAnimationFrame( render );
+    window.requestAnimationFrame( render );
 
-  renderer.render( scene, camera );
+    renderer.render( scene, camera );
 }
 
 resizeWindow();

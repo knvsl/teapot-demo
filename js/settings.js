@@ -26,7 +26,7 @@ var defaults = {
     kD : 0.8,
     kS : 0.8,
     alphaX : 0.5,
-    alphaY : 0.1,
+    alphaY : 0.05,
 };
 
 // Light Settings
@@ -42,7 +42,7 @@ var color = {
 // Background Color
 var backgroundColor = new THREE.Color( 0xF2F3F4 );
 
-// Cubemap 
+// Cubemap
 var cubemap = new THREE.CubeTextureLoader()
   .setPath( 'img/deception_pass/' )
   .load( [

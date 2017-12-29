@@ -10,6 +10,7 @@ const ANISOTROPHIC = 3;
 var settings = {
   rotate : false,
   shader : PHONG,
+  skybox : false,
 };
 
 // Default Uniform Values

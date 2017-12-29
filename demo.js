@@ -69,7 +69,7 @@ function render() {
     }
 
     orbitControls.update();
-    updateMaterials(currentMaterial);
+    updateMaterials(currentShader.material);
 
     window.requestAnimationFrame( render );
 

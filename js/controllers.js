@@ -172,20 +172,10 @@ function updateShader(shader) {
 }
 
 function updateMaterials(material) {
-<<<<<<< HEAD
 
   material.needsUpdate = true;
   skyboxMaterial.needsUpdate = true;
-  
-=======
 
-  material.needsUpdate = true;
-
-  if(settings.skybox){
-    skyboxMaterial.needsUpdate = true;
-  }
-
->>>>>>> movableLight
 }
 
 function setMaterial (object, material) {

@@ -30,6 +30,7 @@ var phongGUI = new dat.GUI( { width : 500 } );
   phongGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(updateShader).listen();
   phongGUI.addColor(color, 'light' ).name('Light Color').onChange(updateLightColor).onFinishChange(enableOrbit);
   phongGUI.add(lightPosition.value, 'x', -10, 10).name('Light X').onChange(disableOrbit).onFinishChange(enableOrbit);
+
 // Uniforms Folder
 var uniforms = phongGUI.addFolder('Uniforms');
   uniforms.addColor(color, 'ambient' ).name('Ambient Color').onChange(updateAmbientColor).onFinishChange(enableOrbit);
@@ -39,8 +40,9 @@ var uniforms = phongGUI.addFolder('Uniforms');
   uniforms.add(kA, 'value', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
   uniforms.add(kS, 'value', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
   uniforms.add(kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-// Reset Button
-phongGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
+
+  // Reset Button
+  phongGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
 
 
 // LAMBERTIAN
@@ -48,14 +50,17 @@ var lambertGUI = new dat.GUI( { width : 500 } );
   lambertGUI.add(settings, 'rotate').name('Rotate');
   lambertGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(updateShader).listen();
   lambertGUI.addColor(color, 'light' ).name('Light Color').onChange(updateLightColor).onFinishChange(enableOrbit);
+
 // Uniforms Folder
 var uniforms = lambertGUI.addFolder('Uniforms');
   uniforms.addColor(color, 'diffuse' ).name('Diffuse Color').onChange(updateDiffuseColor).onFinishChange(enableOrbit);
   uniforms.add(kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-// Reset Button
-lambertGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
-// Hide lambertGUI at start
-lambertGUI.domElement.style.display = 'none';
+
+  // Reset Button
+  lambertGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
+
+  // Hide at start
+  lambertGUI.domElement.style.display = 'none';
 
 
 // ANISOTROPHIC
@@ -63,6 +68,7 @@ var anisoGUI = new dat.GUI( { width : 500 } );
   anisoGUI.add(settings, 'rotate').name('Rotate');
   anisoGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic: ANISOTROPHIC } ).name('Shader').onChange(updateShader).listen();
   anisoGUI.addColor(color, 'light' ).name('Light Color').onChange(updateLightColor).onFinishChange(enableOrbit);
+
 // Uniforms Folder
 var uniforms = anisoGUI.addFolder('Uniforms');
   uniforms.addColor(color, 'ambient' ).name('Ambient Color').onChange(updateAmbientColor).onFinishChange(enableOrbit);
@@ -73,10 +79,12 @@ var uniforms = anisoGUI.addFolder('Uniforms');
   uniforms.add(kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
   uniforms.add(alphaX, 'value', 0, 1).name('X Width').onChange(disableOrbit).onFinishChange(enableOrbit);
   uniforms.add(alphaY, 'value', 0, 1).name('Y Width').onChange(disableOrbit).onFinishChange(enableOrbit);
-// Reset Button
-anisoGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
-// Hide anisoGUI at start
-anisoGUI.domElement.style.display = 'none';
+
+  // Reset Button
+  anisoGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
+
+  // Hide at start
+  anisoGUI.domElement.style.display = 'none';
 
 /* Default Shader */
 
@@ -86,13 +94,14 @@ var currentMaterial = phongMaterial;
 
 /* Update Shaders */
 
-// Fix to update display
 function refreshDisplay() {
 
+  // Update GUI
   for (var c in currentGUI.__controllers) {
       currentGUI.__controllers[c].updateDisplay();
   }
 
+  // Update Folders
   for (var c in currentGUI.__folders) {
       currentGUI.__folders[c].updateDisplay();
   }

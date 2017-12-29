@@ -46,7 +46,7 @@ scene.add( lightHelper );
 // SKYBOX
 var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
 var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-//scene.add(skybox)
+scene.add(skybox)
 
 // Load Object
 var teapot;

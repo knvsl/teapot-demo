@@ -29,8 +29,12 @@ var resetButton = {
 
 // PHONG + BLINNPHONG
 var phongGUI = new dat.GUI( { width : 400 } );
-  phongGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
-  phongGUI.add(settings, 'rotate').name('Rotate');
+  phongGUI.add(resetButton, 'reset')
+  .name('RESET')
+  .onFinishChange(refreshDisplay);
+
+  phongGUI.add(settings, 'rotate')
+  .name('Rotate');
 
   phongGUI.add(settings, 'shader', {
     Phong : PHONG,
@@ -44,31 +48,90 @@ var phongGUI = new dat.GUI( { width : 400 } );
   .onChange(updateShader)
   .listen();
 
-  phongGUI.addColor(color, 'light' ).name('Light Color').onChange(updateLightColor).onFinishChange(enableOrbit);
-  phongGUI.add(lightPosition.value, 'x', -10, 10).name('Light X').onChange(disableOrbit).onFinishChange(enableOrbit);
+  phongGUI.addColor(color, 'light' )
+  .name('Light Color')
+  .onChange(updateLightColor)
+  .onFinishChange(enableOrbit);
+
+  phongGUI.add(lightPosition.value, 'x', -10, 10)
+  .name('Light X')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
 
 // Uniforms Folder
 var uniforms = phongGUI.addFolder('Uniforms');
-  uniforms.addColor(color, 'ambient' ).name('Ambient Color').onChange(updateAmbientColor).onFinishChange(enableOrbit);
-  uniforms.addColor(color, 'diffuse' ).name('Diffuse Color').onChange(updateDiffuseColor).onFinishChange(enableOrbit);
-  uniforms.addColor(color, 'specular' ).name('Specular Color').onChange(updateSpecularColor).onFinishChange(enableOrbit);
-  uniforms.add(shininess, 'value', 0, 100).name('Shininess').onChange(disableOrbit).onFinishChange(enableOrbit);
-  uniforms.add(kA, 'value', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-  uniforms.add(kS, 'value', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-  uniforms.add(kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+  uniforms.addColor(color, 'ambient' )
+  .name('Ambient Color')
+  .onChange(updateAmbientColor)
+  .onFinishChange(enableOrbit);
+
+  uniforms.addColor(color, 'diffuse' )
+  .name('Diffuse Color')
+  .onChange(updateDiffuseColor)
+  .onFinishChange(enableOrbit);
+
+  uniforms.addColor(color, 'specular' )
+  .name('Specular Color')
+  .onChange(updateSpecularColor)
+  .onFinishChange(enableOrbit);
+
+  uniforms.add(shininess, 'value', 0, 100)
+  .name('Shininess')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  uniforms.add(kA, 'value', 0, 1)
+  .name('Ambient Intensity')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  uniforms.add(kS, 'value', 0, 1)
+  .name('Specular Intensity')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  uniforms.add(kD, 'value', 0, 1)
+  .name('Diffuse Intensity')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
 
 
 // LAMBERTIAN
 var lambertGUI = new dat.GUI( { width : 400 } );
-  lambertGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
-  lambertGUI.add(settings, 'rotate').name('Rotate');
-  lambertGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic : ANISOTROPHIC, Reflection : REFLECTION, Refraction : REFRACTION } ).name('Shader').onChange(updateShader).listen();
-  lambertGUI.addColor(color, 'light' ).name('Light Color').onChange(updateLightColor).onFinishChange(enableOrbit);
+  lambertGUI.add(resetButton, 'reset')
+  .name('RESET')
+  .onFinishChange(refreshDisplay);
+
+  lambertGUI.add(settings, 'rotate')
+  .name('Rotate');
+
+  lambertGUI.add(settings, 'shader', {
+    Phong : PHONG,
+    BlinnPhong : BLINNPHONG,
+    Lambertian : LAMBERTIAN,
+    Anisotrophic : ANISOTROPHIC,
+    Reflection : REFLECTION,
+    Refraction : REFRACTION } )
+    .name('Shader')
+    .onChange(updateShader)
+    .listen();
+
+  lambertGUI.addColor(color, 'light' )
+  .name('Light Color')
+  .onChange(updateLightColor)
+  .onFinishChange(enableOrbit);
 
 // Uniforms Folder
 var uniforms = lambertGUI.addFolder('Uniforms');
-  uniforms.addColor(color, 'diffuse' ).name('Diffuse Color').onChange(updateDiffuseColor).onFinishChange(enableOrbit);
-  uniforms.add(kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
+  uniforms.addColor(color, 'diffuse' )
+  .name('Diffuse Color')
+  .onChange(updateDiffuseColor)
+  .onFinishChange(enableOrbit);
+
+  uniforms.add(kD, 'value', 0, 1)
+  .name('Diffuse Intensity')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
 
 // Hide at start
 lambertGUI.domElement.style.display = 'none';
@@ -76,29 +139,88 @@ lambertGUI.domElement.style.display = 'none';
 
 // ANISOTROPHIC
 var anisoGUI = new dat.GUI( { width : 400 } );
-  anisoGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
-  anisoGUI.add(settings, 'rotate').name('Rotate');
-  anisoGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic : ANISOTROPHIC, Reflection : REFLECTION, Refraction : REFRACTION } ).name('Shader').onChange(updateShader).listen();
-  anisoGUI.addColor(color, 'light' ).name('Light Color').onChange(updateLightColor).onFinishChange(enableOrbit);
+  anisoGUI.add(resetButton, 'reset')
+  .name('RESET')
+  .onFinishChange(refreshDisplay);
+
+  anisoGUI.add(settings, 'rotate')
+  .name('Rotate');
+
+  anisoGUI.add(settings, 'shader', {
+    Phong : PHONG,
+    BlinnPhong : BLINNPHONG,
+    Lambertian : LAMBERTIAN,
+    Anisotrophic : ANISOTROPHIC,
+    Reflection : REFLECTION,
+    Refraction : REFRACTION } )
+    .name('Shader')
+    .onChange(updateShader)
+    .listen();
+
+  anisoGUI.addColor(color, 'light' )
+  .name('Light Color')
+  .onChange(updateLightColor)
+  .onFinishChange(enableOrbit);
 
 // Uniforms Folder
 var uniforms = anisoGUI.addFolder('Uniforms');
-  uniforms.addColor(color, 'ambient' ).name('Ambient Color').onChange(updateAmbientColor).onFinishChange(enableOrbit);
-  uniforms.addColor(color, 'diffuse' ).name('Diffuse Color').onChange(updateDiffuseColor).onFinishChange(enableOrbit);
-  uniforms.addColor(color, 'specular' ).name('Specular Color').onChange(updateSpecularColor).onFinishChange(enableOrbit);
-  uniforms.add(kA, 'value', 0, 1).name('Ambient Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-  uniforms.add(kS, 'value', 0, 1).name('Specular Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-  uniforms.add(kD, 'value', 0, 1).name('Diffuse Intensity').onChange(disableOrbit).onFinishChange(enableOrbit);
-  uniforms.add(alphaX, 'value', 0, 1).name('X Width').onChange(disableOrbit).onFinishChange(enableOrbit);
-  uniforms.add(alphaY, 'value', 0, 1).name('Y Width').onChange(disableOrbit).onFinishChange(enableOrbit);
+  uniforms.addColor(color, 'ambient' )
+  .name('Ambient Color')
+  .onChange(updateAmbientColor)
+  .onFinishChange(enableOrbit);
+
+  uniforms.addColor(color, 'diffuse' )
+  .name('Diffuse Color')
+  .onChange(updateDiffuseColor)
+  .onFinishChange(enableOrbit);
+
+  uniforms.addColor(color, 'specular' )
+  .name('Specular Color')
+  .onChange(updateSpecularColor)
+  .onFinishChange(enableOrbit);
+
+  uniforms.add(kA, 'value', 0, 1)
+  .name('Ambient Intensity')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  uniforms.add(kS, 'value', 0, 1)
+  .name('Specular Intensity')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  uniforms.add(kD, 'value', 0, 1)
+  .name('Diffuse Intensity')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  uniforms.add(alphaX, 'value', 0, 1)
+  .name('X Width')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  uniforms.add(alphaY, 'value', 0, 1)
+  .name('Y Width')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
 
 // Hide at start
 anisoGUI.domElement.style.display = 'none';
 
 // REFLECTION + REFRACTION
 var reflectGUI =  new dat.GUI( { width : 400 } );
-  reflectGUI.add(settings, 'rotate').name('Rotate');
-  reflectGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic : ANISOTROPHIC, Reflection : REFLECTION, Refraction : REFRACTION } ).name('Shader').onChange(updateShader).listen();
+  reflectGUI.add(settings, 'rotate')
+  .name('Rotate');
+  reflectGUI.add(settings, 'shader', {
+    Phong : PHONG,
+    BlinnPhong : BLINNPHONG,
+    Lambertian : LAMBERTIAN,
+    Anisotrophic : ANISOTROPHIC,
+    Reflection : REFLECTION,
+    Refraction : REFRACTION } )
+    .name('Shader')
+    .onChange(updateShader)
+    .listen();
 
 // Hide at start
 reflectGUI.domElement.style.display = 'none';

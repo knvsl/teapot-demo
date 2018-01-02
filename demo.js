@@ -35,7 +35,7 @@ scene.add( axesHelper );
 var lightGeometry = new THREE.SphereGeometry( 0.5, 3, 3 );
 var lightMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } );
 var light = new THREE.Mesh( lightGeometry, lightMaterial );
-light.position.set( 3, 3, 0 );
+light.position.set( lightPosition.value.x, lightPosition.value.y, lightPosition.value.z );
 scene.add( light );
 
 // SKYBOX
@@ -76,6 +76,9 @@ function render() {
 
     orbitControls.update();
     updateMaterials(currentShader.material);
+
+    // TODO: this works for X pos
+    light.position.set( lightPosition.value.x, lightPosition.value.y, lightPosition.value.z );
 
     window.requestAnimationFrame( render );
 

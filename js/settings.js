@@ -12,7 +12,6 @@ const REFRACTION = 5;
 var settings = {
   rotate : false,
   shader : PHONG,
-  //skybox : false,
 };
 
 // Default Uniform Values
@@ -39,14 +38,17 @@ var color = {
   specular : defaults.specularColor,
 }
 
-// Background Color
-var backgroundColor = new THREE.Color( 0xF2F3F4 );
+// Cubemap Settings
 
-// Cubemap
+/*
+ft  bk
+up  dn
+rt  lf
+*/
 var cubemap = new THREE.CubeTextureLoader()
-  .setPath( 'img/deception_pass/' )
-  .load( [
-    'deception_pass_ft.png', 'deception_pass_bk.png',
-    'deception_pass_up.png', 'deception_pass_dn.png',
-    'deception_pass_rt.png', 'deception_pass_lf.png'
-  ] );
+  .setPath( 'img/default/' )
+  .load([
+    'default_ft.png', 'default_bk.png',
+    'default_up.png', 'default_dn.png',
+    'default_rt.png', 'default_lf.png'
+  ]);

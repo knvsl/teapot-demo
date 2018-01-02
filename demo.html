@@ -30,7 +30,7 @@
       }
 
       .thumbnails img {
-	      height: 75px;
+	      height: 50px;
       }
 
       .thumbnails img:hover {
@@ -43,9 +43,12 @@
     <!-- Skybox picker -->
     <div class="thumbnails" align="left">
       <p>Skyboxes</p>
-      <img src="img/blood-valley/blood-valley_ft.png" alt=""/>
-      <img src="img/deception_pass/deception_pass_ft.png" alt=""/>
-      <img src="img/whirlpool/whirlpool_lf.png" alt=""/>
+      <img id="default" onclick="updateSkybox(this.id)" src="img/default/default.png" alt=""/>
+      <img id="blood-valley" onclick="updateSkybox(this.id)" src="img/blood-valley/blood-valley_ft.png" alt=""/>
+      <img id="deception_pass" onclick="updateSkybox(this.id)" src="img/deception_pass/deception_pass_ft.png" alt=""/>
+      <img id="whirlpool" onclick="updateSkybox(this.id)" src="img/whirlpool/whirlpool_lf.png" alt=""/>
+      <img id="midnight-silence" onclick="updateSkybox(this.id)" src="img/midnight-silence/midnight-silence_lf.png" alt=""/>
+      <img id="iceflats" onclick="updateSkybox(this.id)" src="img/iceflats/iceflats_lf.png" alt=""/>
     </div>
     <div id='canvas'></div>
     <script src="js/libs/three.min.js"></script>

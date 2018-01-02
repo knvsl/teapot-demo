@@ -3,10 +3,12 @@
 // GUI Reset Function
 var resetButton = {
   reset: function(){
+
     color.light = defaults.lightColor;
     color.ambient = defaults.ambientColor;
     color.diffuse = defaults.diffuseColor;
     color.specular = defaults.specularColor;
+
     shininess.value = defaults.shininess;
     kA.value = defaults.kA;
     kD.value = defaults.kD;
@@ -14,7 +16,6 @@ var resetButton = {
     alphaX.value = defaults.alphaX;
     alphaY.value = defaults.alphaY;
 
-    // Need to update color uniforms
     lightColor.value = new THREE.Color( color.light );
     ambientColor.value = new THREE.Color( color.ambient );
     diffuseColor.value = new THREE.Color( color.diffuse );
@@ -30,7 +31,19 @@ var resetButton = {
 var phongGUI = new dat.GUI( { width : 400 } );
   phongGUI.add(resetButton, 'reset').name('RESET').onFinishChange(refreshDisplay);
   phongGUI.add(settings, 'rotate').name('Rotate');
-  phongGUI.add(settings, 'shader', { Phong : PHONG, BlinnPhong : BLINNPHONG, Lambertian : LAMBERTIAN, Anisotrophic : ANISOTROPHIC, Reflection : REFLECTION, Refraction : REFRACTION } ).name('Shader').onChange(updateShader).listen();
+
+  phongGUI.add(settings, 'shader', {
+    Phong : PHONG,
+    BlinnPhong : BLINNPHONG,
+    Lambertian : LAMBERTIAN,
+    Anisotrophic : ANISOTROPHIC,
+    Reflection : REFLECTION,
+    Refraction : REFRACTION
+  } )
+  .name('Shader')
+  .onChange(updateShader)
+  .listen();
+
   phongGUI.addColor(color, 'light' ).name('Light Color').onChange(updateLightColor).onFinishChange(enableOrbit);
   phongGUI.add(lightPosition.value, 'x', -10, 10).name('Light X').onChange(disableOrbit).onFinishChange(enableOrbit);
 
@@ -168,13 +181,10 @@ function updateShader(shader) {
 
   // Hide old gui
   currentShader.gui.domElement.style.display = 'none';
-
   currentShader = shaders[+shader];
   setMaterial(teapot, currentShader.material);
-
   // Show new gui
   currentShader.gui.domElement.style.display = '';
-
   // Refresh the controller
   resetButton.reset();
   refreshDisplay();
@@ -183,10 +193,8 @@ function updateShader(shader) {
 }
 
 function updateMaterials(material) {
-
   material.needsUpdate = true;
   skyboxMaterial.needsUpdate = true;
-
 }
 
 function setMaterial (object, material) {
@@ -195,4 +203,21 @@ function setMaterial (object, material) {
       child.material = material;
     }
   });
+}
+
+function updateSkybox(skybox) {
+
+  var dir = 'img/' + skybox + '/';
+
+  cubemap = new THREE.CubeTextureLoader()
+    .setPath( dir )
+    .load([
+      skybox + '_ft.png', skybox + '_bk.png',
+      skybox + '_up.png', skybox + '_dn.png ',
+      skybox + '_rt.png', skybox + '_lf.png'
+    ]);
+
+  skyboxMaterial.uniforms.skybox.value = cubemap;
+  reflectionMaterial.uniforms.skybox.value = cubemap;
+  refractionMaterial.uniforms.skybox.value = cubemap;
 }

@@ -4,16 +4,17 @@ varying vec3 vPosition;
 
 void main() {
 
-	// Normaliz vectors
+	// Normalize vectors
 	vec3 n = normalize(vNormal);
 	vec3 v = normalize(cameraPosition - vPosition);
 
-	// Refracted vector
 	float index = 1.0;
 	vec3 r;
 
+	// Angle of refraction
 	float angle = 1.0 - pow(index, 2.0) * (1.0 - pow(dot(n, v), 2.0));
 
+	// Refracted vector
 	if (angle < 0.0)
 			 r = vec3(0.0, 0.0, 0.0);
 	 else

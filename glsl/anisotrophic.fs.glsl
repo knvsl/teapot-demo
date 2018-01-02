@@ -38,7 +38,7 @@ void main() {
 	vec3 diffuseLight = kD * diffuseColor * diffuse * lightColor;
 
 
-	// dot products
+	// Dot products
 	float ln = max(dot(l,n), 0.0);
 	float vn = max(dot(v,n), 0.0);
 	float ht = dot(h,t);
@@ -47,7 +47,7 @@ void main() {
 
 	// Specular (Ward's Model)
 	float specular = sqrt(max(ln/vn, 0.0))
-									 * exp(-2.0 * (pow(ht/alphaX, 2.0) + pow(hb/alphaY, 2.0)) / (1.0 + hn));
+										* exp(-2.0 * (pow(ht/alphaX, 2.0) + pow(hb/alphaY, 2.0)) / (1.0 + hn));
 	vec3 specularLight = kS * specularColor * specular * lightColor;
 
 	// Total Light

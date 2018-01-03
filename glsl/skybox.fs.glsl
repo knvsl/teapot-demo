@@ -1,4 +1,5 @@
 uniform samplerCube skybox;
+
 varying vec3 vPosition;
 
 void main() {

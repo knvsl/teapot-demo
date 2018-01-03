@@ -108,6 +108,21 @@ var lambertGUI = new dat.GUI( { width : 400 } );
   .onChange(updateLightColor)
   .onFinishChange(enableOrbit);
 
+  lambertGUI.add(lightPosition.value, 'x', -15, 15)
+  .name('Light X')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  lambertGUI.add(lightPosition.value, 'y', -15, 15)
+  .name('Light Y')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  lambertGUI.add(lightPosition.value, 'z', -15, 15)
+  .name('Light Z')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
 // Uniforms Folder
 var uniforms = lambertGUI.addFolder('Uniforms');
   uniforms.addColor(color, 'diffuse' )
@@ -147,6 +162,21 @@ var anisoGUI = new dat.GUI( { width : 400 } );
   anisoGUI.addColor(color, 'light' )
   .name('Light Color')
   .onChange(updateLightColor)
+  .onFinishChange(enableOrbit);
+
+  anisoGUI.add(lightPosition.value, 'x', -15, 15)
+  .name('Light X')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  anisoGUI.add(lightPosition.value, 'y', -15, 15)
+  .name('Light Y')
+  .onChange(disableOrbit)
+  .onFinishChange(enableOrbit);
+
+  anisoGUI.add(lightPosition.value, 'z', -15, 15)
+  .name('Light Z')
+  .onChange(disableOrbit)
   .onFinishChange(enableOrbit);
 
 // Uniforms Folder

@@ -8,6 +8,16 @@ const ANISOTROPHIC = 3;
 const REFLECTION = 4;
 const REFRACTION = 5;
 
+// Shader Menu Options
+var shaderMenu = {
+  Phong : PHONG,
+  BlinnPhong : BLINNPHONG,
+  Lambertian : LAMBERTIAN,
+  Anisotrophic : ANISOTROPHIC,
+  Reflection : REFLECTION,
+  Refraction : REFRACTION
+}
+
 // Default Uniform Values
 var defaults = {
     lightColor : 0xFFFFFF,

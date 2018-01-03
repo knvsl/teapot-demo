@@ -12,7 +12,6 @@ void main() {
    vec3 worldPosition = vec3(modelMatrix * vec4(position, 1.0));
    vec3 lightDirection = lightPosition - worldPosition;
 
-   // Set varying variables in eye coordinates
    vLight = vec3(viewMatrix * vec4(lightDirection, 0.0));
    vNormal = normalMatrix * normal;
 

@@ -13,14 +13,7 @@ var phongGUI = new dat.GUI( { width : 400 } );
   phongGUI.add(settings, 'rotate')
   .name('Rotate');
 
-  phongGUI.add(settings, 'shader', {
-    Phong : PHONG,
-    BlinnPhong : BLINNPHONG,
-    Lambertian : LAMBERTIAN,
-    Anisotrophic : ANISOTROPHIC,
-    Reflection : REFLECTION,
-    Refraction : REFRACTION
-  } )
+  phongGUI.add(settings, 'shader', shaderMenu )
   .name('Shader')
   .onChange(updateShader)
   .listen();
@@ -92,13 +85,7 @@ var lambertGUI = new dat.GUI( { width : 400 } );
   lambertGUI.add(settings, 'rotate')
   .name('Rotate');
 
-  lambertGUI.add(settings, 'shader', {
-    Phong : PHONG,
-    BlinnPhong : BLINNPHONG,
-    Lambertian : LAMBERTIAN,
-    Anisotrophic : ANISOTROPHIC,
-    Reflection : REFLECTION,
-    Refraction : REFRACTION } )
+  lambertGUI.add(settings, 'shader', shaderMenu )
     .name('Shader')
     .onChange(updateShader)
     .listen();
@@ -148,13 +135,7 @@ var anisoGUI = new dat.GUI( { width : 400 } );
   anisoGUI.add(settings, 'rotate')
   .name('Rotate');
 
-  anisoGUI.add(settings, 'shader', {
-    Phong : PHONG,
-    BlinnPhong : BLINNPHONG,
-    Lambertian : LAMBERTIAN,
-    Anisotrophic : ANISOTROPHIC,
-    Reflection : REFLECTION,
-    Refraction : REFRACTION } )
+  anisoGUI.add(settings, 'shader', shaderMenu )
     .name('Shader')
     .onChange(updateShader)
     .listen();
@@ -233,13 +214,7 @@ var reflectGUI =  new dat.GUI( { width : 400 } );
   reflectGUI.add(settings, 'rotate')
   .name('Rotate');
 
-  reflectGUI.add(settings, 'shader', {
-    Phong : PHONG,
-    BlinnPhong : BLINNPHONG,
-    Lambertian : LAMBERTIAN,
-    Anisotrophic : ANISOTROPHIC,
-    Reflection : REFLECTION,
-    Refraction : REFRACTION } )
+  reflectGUI.add(settings, 'shader', shaderMenu )
     .name('Shader')
     .onChange(updateShader)
     .listen();

@@ -3,4 +3,4 @@ A simple graphics demo using Three.js and dat.GUI for learning about lighting an
 
 All skyboxes sourced from: http://www.custommapmakers.org/skyboxes.php
 
-[**Demo**](https://k1mby.github.io/teapot-demo/demo.html)
+[**DEMO**](https://k1mby.github.io/teapot-demo/demo.html)

@@ -31,14 +31,14 @@ orbitControls.zoomSpeed = 0.1;
 var axesHelper = new THREE.AxesHelper( 3 );
 scene.add( axesHelper );
 
-// TODO: Make movable, color reflects lightcolor
+// Light
 var lightGeometry = new THREE.SphereGeometry( 0.5, 3, 3 );
 var lightMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } );
 var light = new THREE.Mesh( lightGeometry, lightMaterial );
 light.position.set( lightPosition.value.x, lightPosition.value.y, lightPosition.value.z );
 scene.add( light );
 
-// SKYBOX
+// Skybox
 var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
 var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
 scene.add(skybox)
@@ -74,15 +74,14 @@ function render() {
     teapot.rotation.y += 0.005;
   }
 
-    orbitControls.update();
-    updateMaterials(currentShader.material);
+  // Move light
+  light.position.set( lightPosition.value.x, lightPosition.value.y, lightPosition.value.z );
 
-    // TODO: this works for X pos
-    light.position.set( lightPosition.value.x, lightPosition.value.y, lightPosition.value.z );
+  orbitControls.update();
+  updateMaterials(currentShader.material);
 
-    window.requestAnimationFrame( render );
-
-    renderer.render( scene, camera );
+  window.requestAnimationFrame( render );
+  renderer.render( scene, camera );
 }
 
 resizeWindow();

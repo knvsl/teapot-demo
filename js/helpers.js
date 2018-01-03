@@ -95,8 +95,7 @@ function updateShader(shader) {
   setMaterial(teapot, currentShader.material);
   currentShader.gui.domElement.style.display = '';
 
-  // Refresh the controller
-  resetButton.reset();
+  // Refresh the display
   refreshDisplay();
 
   orbitControls.enabled = true;

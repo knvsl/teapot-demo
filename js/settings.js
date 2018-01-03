@@ -8,12 +8,6 @@ const ANISOTROPHIC = 3;
 const REFLECTION = 4;
 const REFRACTION = 5;
 
-// Object Settings
-var settings = {
-  rotate : false,
-  shader : PHONG,
-};
-
 // Default Uniform Values
 var defaults = {
     lightColor : 0xFFFFFF,
@@ -26,25 +20,28 @@ var defaults = {
     kS : 0.8,
     alphaX : 0.5,
     alphaY : 0.05,
+    x : -3,
+    y : 3,
+    z : 1
+};
+
+// Object Settings
+var settings = {
+  rotate : false,
+  shader : PHONG
 };
 
 // Light Settings
-var lightPosition = { type: 'v3', value: new THREE.Vector3( 3, 3, 0 ) }
+var lightPosition = { type: 'v3', value: new THREE.Vector3( defaults.x, defaults.y, defaults.z ) }
 
 var color = {
   light : defaults.lightColor,
   ambient : defaults.ambientColor,
   diffuse : defaults.diffuseColor,
-  specular : defaults.specularColor,
+  specular : defaults.specularColor
 }
 
 // Cubemap Settings
-
-/*
-ft  bk
-up  dn
-rt  lf
-*/
 var cubemap = new THREE.CubeTextureLoader()
   .setPath( 'img/default/' )
   .load([

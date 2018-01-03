@@ -21,7 +21,7 @@ Example (demo.html):
     <img id="mySkyboxName" onclick="updateSkybox(this.id)" src="img/mySkyboxName/mySkyboxName_lf.png" alt=""/>
 ```
 
-#### Add a new shader
+### Add a new shader
 1. Place the file inside the `glsl` folder. 
 
 2. Inside `settings.js` add a new constant for the shader that will be used for switching shaders and add a menu option to the `shaderMenu` object in order to select the new shader in the controllers.
@@ -47,9 +47,9 @@ Example (demo.html):
        shaders[MYSHADER] = myShader;
    ```
 ## Code Organization
-#### GLSL
+### GLSL
 This folder contains all the custom shaders. Many of the vertex/fragment shaders are very similar but are kept individual for learning purposes
-#### JS
+### JS
 
 `settings.js` Contains all the settings & default values for the demo. This is the only place you would need to change any values directly. Default settings are inside the `defaults` object.
 

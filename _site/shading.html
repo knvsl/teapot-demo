@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+<!-- Begin Jekyll SEO tag v2.3.0 -->
+<title>teapot-demo</title>
+<meta property="og:title" content="teapot-demo" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/shading.html" />
+<meta property="og:url" content="http://localhost:4000/shading.html" />
+<meta property="og:site_name" content="teapot-demo" />
+<script type="application/ld+json">
+{"name":null,"description":null,"author":null,"@type":"WebPage","url":"http://localhost:4000/shading.html","publisher":null,"image":null,"headline":"teapot-demo","dateModified":null,"datePublished":null,"sameAs":null,"mainEntityOfPage":null,"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=04754b32074248d25bed88dcdd96da21be0c45f1">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <a href="http://github.com/pages/k1mby/teapot-demo"> <h1>teapot-demo</h1> </a>
+        <p></p>
+
+        
+          <!--<p class="view"><a href="http://github.com/k1mby/teapot-demo">View the Project on GitHub <small></small></a></p>-->
+        
+
+        
+
+        
+          <br>
+          <ul class="downloads">
+            <li><a href="https://github.com/k1mby/teapot-demo/archive/master.zip">Download <strong>ZIP File</strong></a></li>
+            <li><a href="https://github.com/k1mby/teapot-demo/archive/master.tar.gz">Download <strong>TAR Ball</strong></a></li>
+            <li><a href="http://github.com/k1mby/teapot-demo">View On <strong>GitHub</strong></a></li>
+          </ul>
+          <br>
+        
+          <h3>Documentation</h3>
+          <a href="intro.html">Getting Started</a><br>
+          <a href="shading.html">Shading Models</a><br>
+          <a href="enviromap.html">Environment Mapping</a>
+          <br><br><br>
+          <p class="demo-link"><a href="https://k1mby.github.io/teapot-demo/src/demo.html">DEMO</a></p>
+      </header>
+      <section>
+
+      <p><a name="shading"></a></p>
+<h2 id="shading-models">Shading Models</h2>
+
+<p>Each of the sections below include a brief overview of the following shading models, including the code implementation.</p>
+
+<p><strong>Jump to Section</strong>:</p>
+
+<p><a href="#lambertian">Lambertian</a><br />
+<a href="#phong">Phong</a><br />
+<a href="#bphong">Blinn-Phong</a><br />
+<a href="#aniso">Anisotrophic</a></p>
+
+<p><a href="./">Back to main</a>
+<br />
+<br /></p>
+
+<hr />
+
+<p><a name="lambertian"></a></p>
+<h3 id="lambertian-shading">Lambertian Shading</h3>
+
+<p>Also known as diffuse shading, <a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian</a> surfaces are typically recognized as ‘matte’ surfaces. These are surfaces that reflect light equally in all directions.</p>
+
+<p>The name Lambertian refers to Lambert’s Cosine Law which is used to calculate the color of a diffuse surface. Lambert’s Cosine Law says that the amount of light on a surface is equal to the cosine of the angle between the light direction and the surface normal. It is independent of where the viewer is.</p>
+
+<p>So to calculate Lambertian shading we need the surface normal as well as the direction of light.</p>
+
+<h4 id="vertex-shader">Vertex Shader</h4>
+
+<p>In our code we set the following uniforms:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">uniform</span> <span class="kt">vec3</span> <span class="n">lightColor</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">vec3</span> <span class="n">diffuseColor</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">vec3</span> <span class="n">lightPosition</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">float</span> <span class="n">kD</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>We pass in the lights position to calculate the light direction. You could also pass in the light direction vector. We define some additional uniforms. <code class="highlighter-rouge">kD</code> is the diffuse intensity, <code class="highlighter-rouge">diffuseColor</code> is the color of the surface under light, and <code class="highlighter-rouge">lightColor</code> represents the color of the light itself.</p>
+
+<p>We also define two varying variables, <code class="highlighter-rouge">vLight</code> will hold our light direction vector and <code class="highlighter-rouge">vNormal</code> will hold our normal in the proper coordinates.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">varying</span> <span class="kt">vec3</span> <span class="n">vLight</span><span class="p">;</span>
+<span class="k">varying</span> <span class="kt">vec3</span> <span class="n">vNormal</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>First we compute the light direction vector. The <code class="highlighter-rouge">position</code> attribute is built-in to three.js as well as <code class="highlighter-rouge">normalMatrix</code> which is our inverse transpose modelViewMatrix.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kt">vec3</span> <span class="n">worldPosition</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="n">modelMatrix</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
+   <span class="kt">vec3</span> <span class="n">lightDirection</span> <span class="o">=</span> <span class="n">lightPosition</span> <span class="o">-</span> <span class="n">worldPosition</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Then we transform to eye coordinates and set our varying variables</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vLight</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="n">viewMatrix</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">lightDirection</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
+<span class="n">vNormal</span> <span class="o">=</span> <span class="n">normalMatrix</span> <span class="o">*</span> <span class="n">normal</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/lambertian.vs.glsl">here</a></p>
+
+<h4 id="fragment-shader">Fragment Shader</h4>
+
+<p>After making sure the vectors are normalized we can calculate the diffuse term using Lambert’s Law of Cosines. We clamp it to prevent points at negative angles from being lit.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">n</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p>Finally to compute our final diffuse light we multiply the diffuse intensity, diffuse color, diffuse term, and light color.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">diffuseLight</span> <span class="o">=</span> <span class="n">kD</span> <span class="o">*</span> <span class="n">diffuseColor</span> <span class="o">*</span> <span class="n">diffuse</span> <span class="o">*</span> <span class="n">lightColor</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/lambertian.fs.glsl">here</a>
+<br /><br />
+<br />
+<a href="#shading">Back to top</a></p>
+
+<hr />
+
+<p><a name="phong"></a></p>
+<h3 id="phong">Phong</h3>
+
+<p>The <a href="https://en.wikipedia.org/wiki/Phong_reflection_model">Phong reflection model</a> computes light as a sum of ambient, diffuse, and specular terms. Phong shading reflects how shiny surfaces have intense highlights while rough or dull surfaces tend to have more diffused highlights.</p>
+
+<p>Ambient lighting represents light throughout the scene, coming from all directions. Ambient lighting is uniform and gives a certain level of brightness.</p>
+
+<p>Diffuse light is the same as in Lambertian shading, it is direct light hitting a surface and reflected uniformly in all directions.</p>
+
+<p>Specular light is the bright highlight seen on shiny surfaces. Specular highlights are the concentrated reflection of light in specific area.</p>
+
+<h4 id="vertex-shader-1">Vertex Shader</h4>
+
+<p>To calculate our Phong reflection model we need the ambient, diffuse and specular terms. We’ll pass in the same uniforms as before since we are still calcuating a diffuse term. Additionally we define the following uniforms:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">uniform</span> <span class="kt">vec3</span> <span class="n">ambientColor</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">vec3</span> <span class="n">specularColor</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">float</span> <span class="n">shininess</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">float</span> <span class="n">kA</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">float</span> <span class="n">kS</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">kA</code> is the ambient intensity, <code class="highlighter-rouge">kS</code> the specular intensity and <code class="highlighter-rouge">shininess</code> is our shininess exponent which we will see in our specular calculation.</p>
+
+<p>The vertex shader is nearly the same as before. The difference is that our specular term relies on the direction of view so we need to compute this as well.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vPosition</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="n">viewMatrix</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">worldPosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/phong.vs.glsl">here</a></p>
+
+<h3 id="fragment-shader-1">Fragment Shader</h3>
+
+<p>Specular highlights are reflections of intense light on the surface.</p>
+
+<p>To see the reflection of a point on a mirror the view direction needs to be the same as the reflection direction.</p>
+
+<p>So the Phong specular term is calculated as the dot product between the bounce vector (or reflection vector) and the view vector, which is our direction of view. We then raise this dot product to the power of the shininess exponent to further control the intensity of the specular highlight.</p>
+
+<p>In our code the diffuse term is calculated the same.</p>
+
+<p>The ambient term is computed simply by multiplying the ambient intensity by the ambient light color.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">ambientLight</span> <span class="o">=</span> <span class="n">kA</span> <span class="o">*</span> <span class="n">ambientColor</span><span class="p">;</span>
+</code></pre></div></div>
+<p>To calculate the specular term we first need to compute the bounce vector</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">b</span> <span class="o">=</span> <span class="o">-</span><span class="n">l</span> <span class="o">+</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>We clamp the dot product of the bounce vector and view vector, and raise this to the power of the shininess exponent.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">specular</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">v</span><span class="p">)),</span> <span class="n">shininess</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>To compute the total specular light we multiply the specular term we just calculated with the specular intensity, specular color, and the light color.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">specularLight</span> <span class="o">=</span> <span class="n">kS</span> <span class="o">*</span> <span class="n">specularColor</span> <span class="o">*</span> <span class="n">specular</span> <span class="o">*</span> <span class="n">lightColor</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>After calculating the ambient, diffuse, and specular terms we sum them together for our final result.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">totalLight</span> <span class="o">=</span> <span class="n">ambientLight</span> <span class="o">+</span> <span class="n">diffuseLight</span> <span class="o">+</span> <span class="n">specularLight</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/phong.fs.glsl">here</a>
+<br /><br />
+<br />
+<a href="#shading">Back to top</a></p>
+
+<hr />
+
+<p><a name="bphong"></a></p>
+<h3 id="blinn-phong">Blinn-Phong</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_shading_model">Blinn-Phong shading</a> builds off of the Phong model, with the difference being in the specular term.</p>
+
+<p>In Blinn-Phong shading we use the halfway vector, which represents the vector halfway between the light direction and the view direction.</p>
+
+<p>If we think about microfacets in a surface, then the halfway vector is the surface normal of the microfacet that reflects light directly at the viewer.</p>
+
+<h4 id="vertex-shader-2">Vertex Shader</h4>
+
+<p>Our vertex shader is the same as our phong vertex shader.</p>
+
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/blinn_phong.vs.glsl">here</a>
+<br /><br /></p>
+
+<h4 id="fragment-shader-2">Fragment Shader</h4>
+
+<p>For the fragment shader we now need to compute the halfway vector instead of the bounce vector.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">h</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">v</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>All of our calculations remain the same as in Phong except our specular term which will use H instead of B.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">specular</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">n</span><span class="p">)),</span> <span class="n">shininess</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>As before we sum our ambient, diffuse, and newly calculated specular terms to get the final result.</p>
+
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/blinn_phong.fs.glsl">here</a>
+<br /><br />
+<br />
+<a href="#shading">Back to top</a></p>
+
+<hr />
+
+<p><a name="aniso"></a></p>
+<h3 id="anisotropic">Anisotropic</h3>
+
+<p>This shader is used to simulate metallic surfaces. An anisotropic surface has directional dependencies, like the reflections on a metal surface.</p>
+
+<p>Here anisotropic shading is implemented using <a href="https://en.wikipedia.org/wiki/Specular_highlight#Ward_anisotropic_distribution">Ward’s Model of Anisotropic Reflection</a></p>
+
+<p>Again it is the specular term that varies, where we now have parameters <code class="highlighter-rouge">alphaX</code> and <code class="highlighter-rouge">alphaY</code> that control the width and height of the specular reflection.</p>
+
+<p>We also use some new vectors, the tangent vector which will represents the brush direction on the surface and the binomial vector which is orthogonal to both the tangent and the surface.</p>
+
+<h4 id="vertex-shader-3">Vertex Shader</h4>
+
+<p>Our vertex shader is the same as our Phong and Blinn-Phong shader.</p>
+
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/anisotropic.vs.glsl">here</a>
+<br /><br /></p>
+
+<h3 id="fragment-shader-3">Fragment Shader</h3>
+
+<p>The fragment shader use the tangent and binomial vectors and computes the equation given by Ward’s model. The result is a specular reflection that bends as you look at it and whose shape can be controlled to simulate metal.</p>
+
+<p>We normalize all our vectors as usual. The tangent vector is then computed as the cross product between the normal vector and the up vector, which is defined here as (0, 1, 0). The up vector defines what direction is “up”.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">up</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+<span class="kt">vec3</span> <span class="n">t</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">up</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The binomial vector is orthogonal to both the surface and the tangent so we can calculate it as the cross product of these two vectors.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kt">vec3</span> <span class="n">b</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Next we compute the dot products needed and substitute them into our Ward equation to compute the specular term.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">ln</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">n</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+<span class="kt">float</span> <span class="n">vn</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">n</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+<span class="kt">float</span> <span class="n">ht</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
+<span class="kt">float</span> <span class="n">hb</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">b</span><span class="p">);</span>
+<span class="kt">float</span> <span class="n">hn</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+
+<span class="kt">float</span> <span class="n">specular</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">ln</span><span class="o">/</span><span class="n">vn</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">))</span>
+                           <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="n">ht</span><span class="o">/</span><span class="n">alphaX</span><span class="p">,</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">pow</span><span class="p">(</span><span class="n">hb</span><span class="o">/</span><span class="n">alphaY</span><span class="p">,</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">+</span> <span class="n">hn</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p>As usual we use this new specular term to compute our specular light. Finally we sum the ambient, diffuse and specular light to get our final result.</p>
+
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/anisotropic.vs.glsl">here</a>
+<br /><br /></p>
+
+<p><br />
+<a href="#shading">Back to top</a></p>
+
+
+      </section>
+      <footer>
+        
+        <p>This project is maintained by <a href="http://github.com/k1mby">k1mby</a></p>
+        
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+
+
+  
+  </body>
+</html>

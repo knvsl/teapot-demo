@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+<!-- Begin Jekyll SEO tag v2.3.0 -->
+<title>teapot-demo</title>
+<meta property="og:title" content="teapot-demo" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/intro.html" />
+<meta property="og:url" content="http://localhost:4000/intro.html" />
+<meta property="og:site_name" content="teapot-demo" />
+<script type="application/ld+json">
+{"name":null,"description":null,"author":null,"@type":"WebPage","url":"http://localhost:4000/intro.html","publisher":null,"image":null,"headline":"teapot-demo","dateModified":null,"datePublished":null,"sameAs":null,"mainEntityOfPage":null,"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=04754b32074248d25bed88dcdd96da21be0c45f1">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <a href="http://github.com/pages/k1mby/teapot-demo"> <h1>teapot-demo</h1> </a>
+        <p></p>
+
+        
+          <!--<p class="view"><a href="http://github.com/k1mby/teapot-demo">View the Project on GitHub <small></small></a></p>-->
+        
+
+        
+
+        
+          <br>
+          <ul class="downloads">
+            <li><a href="https://github.com/k1mby/teapot-demo/archive/master.zip">Download <strong>ZIP File</strong></a></li>
+            <li><a href="https://github.com/k1mby/teapot-demo/archive/master.tar.gz">Download <strong>TAR Ball</strong></a></li>
+            <li><a href="http://github.com/k1mby/teapot-demo">View On <strong>GitHub</strong></a></li>
+          </ul>
+          <br>
+        
+          <h3>Documentation</h3>
+          <a href="intro.html">Getting Started</a><br>
+          <a href="shading.html">Shading Models</a><br>
+          <a href="enviromap.html">Environment Mapping</a>
+          <br><br><br>
+          <p class="demo-link"><a href="https://k1mby.github.io/teapot-demo/src/demo.html">DEMO</a></p>
+      </header>
+      <section>
+
+      <p><a name="intro"></a></p>
+<h2 id="getting-started">Getting Started</h2>
+
+<p>This project is a demo of some common shading and reflection models in graphics.</p>
+
+<p>While Three.js provides implementations of many of the materials used, all of the shaders are implemented individually and are accompanied by brief explanations in the sections <a href="shading.html">Shading Models</a> and <a href="enviromap.html">Environment Mapping</a>.</p>
+
+<p><strong>Jump to Section</strong>:</p>
+
+<p><a href="#setup">Setup</a><br />
+<a href="#organization">Organization</a><br />
+<a href="#skybox">Adding Skyboxes</a><br />
+<a href="#shader">Adding Shaders</a></p>
+
+<p><a href="./">Back to main</a>
+<br />
+<br /></p>
+
+<hr />
+
+<p><a name="setup"></a></p>
+<h3 id="prerequisites">Prerequisites</h3>
+
+<p>To run the demo locally you can use node.js <code class="highlighter-rouge">http-server</code> or something alike.</p>
+
+<p>Your browser must support WebGL. Firefox and Chrome are recommended.</p>
+
+<blockquote>
+  <p>Note: Firefox or Chrome are recommended. Not tested on IE.</p>
+
+  <p>There is a known warning in Safari and some older versions of Chrome and Firefox, see <a href="https://github.com/mrdoob/three.js/issues/9716">here</a> if you encounter this:<br />
+<code class="highlighter-rouge">WARNING: 0:1: extension 'GL_ARB_gpu_shader5' is not supported</code><br /></p>
+</blockquote>
+
+<h3 id="installing">Installing</h3>
+
+<ol>
+  <li>
+    <p>Download the source from Github</p>
+  </li>
+  <li>Install http-server if it isn’t already with the following command:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install http-server -g
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Navigate to the root directory of the project</p>
+  </li>
+  <li>Start the server from the command line where <code class="highlighter-rouge">-p</code> is an optional flag to specify the port, 8000 in this case (default 8080):
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http-server -p 8000
+</code></pre></div>    </div>
+  </li>
+  <li>Using the browser open the demo.html file to view the demo.</li>
+</ol>
+
+<blockquote>
+  <p>Note: Firefox or Chrome is recommended (not tested in IE)</p>
+</blockquote>
+
+<p><br />
+<br /></p>
+
+<hr />
+
+<p><a name="organization"></a></p>
+<h3 id="organization">Organization</h3>
+
+<h4 id="glsl">glsl</h4>
+<p>This folder contains all the custom shaders.</p>
+
+<h4 id="img">img</h4>
+<p>This folder contains a separate folder for each set of skybox images.</p>
+
+<h4 id="js">js</h4>
+<p><span style="background-color:#E5E7E9"> <code class="highlighter-rouge">demo.js</code> </span><br />
+This is the main demo file where the scene is created and rendered.</p>
+
+<p><span style="background-color:#E5E7E9"> <code class="highlighter-rouge">settings.js</code> </span><br />
+Contains all the settings &amp; default values for the demo. This is the only place you would need to change any values directly. Default settings are inside the <code class="highlighter-rouge">defaults</code> object.</p>
+
+<p><span style="background-color:#E5E7E9"> <code class="highlighter-rouge">controllers.js</code> </span><br />
+Contains all the code that sets up the dat.GUI controllers.</p>
+
+<p><span style="background-color:#E5E7E9"> <code class="highlighter-rouge">helpers.js</code> </span><br />
+Helper functions that the dat.GUI controllers call like the reset button, switching the shaders etc. are all located here.</p>
+
+<p><span style="background-color:#E5E7E9"> <code class="highlighter-rouge">shaders.js</code> </span><br />
+Contains all the code that sets up and loads the custom shaders. Uniforms that are shared by the various shaders are declared at the top.</p>
+
+<h4 id="obj">obj</h4>
+<p>This contains the models used in the demo.</p>
+
+<p><br />
+<br /></p>
+
+<hr />
+
+<p><a name="skybox"></a></p>
+<h3 id="adding-a-new-skybox">Adding a new Skybox</h3>
+
+<ol>
+  <li>
+    <p>To add a new skybox the 6 images must be placed in a folder with name <code class="highlighter-rouge">mySkyboxName</code> and named individually with the convention below, such that the <em>folder name matches the starting of the image names</em>:</p>
+
+    <p><code class="highlighter-rouge">mySkyboxName_ft.png</code>   <br />
+<code class="highlighter-rouge">mySkyboxName_bk.png</code><br />
+<code class="highlighter-rouge">mySkyboxName_up.png</code>  <br />
+<code class="highlighter-rouge">mySkyboxName_dn.png</code>  <br />
+<code class="highlighter-rouge">mySkyboxName_rt.png</code>  <br />
+<code class="highlighter-rouge">mySkyboxName_lf.png</code></p>
+  </li>
+  <li>
+    <p>The 6 images should correspond to the front, back, up, down, right, and left sides of the skybox.</p>
+  </li>
+  <li>
+    <p>Place the folder of images inside the <code class="highlighter-rouge">img</code> folder of the project.</p>
+  </li>
+  <li>
+    <p>Add a thumbnail inside demo.html where the id is the same as <code class="highlighter-rouge">mySkyBoxName</code>.</p>
+  </li>
+</ol>
+
+<p><code class="highlighter-rouge">demo.html:</code></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;img</span> <span class="na">id=</span><span class="s">"mySkyboxName"</span> <span class="na">onclick=</span><span class="s">"updateSkybox(this.id)"</span> <span class="na">src=</span><span class="s">"img/mySkyboxName/mySkyboxName_lf.png"</span> <span class="na">alt=</span><span class="s">""</span><span class="nt">/&gt;</span>
+</code></pre></div></div>
+<p><br />
+<br />
+<a href="#intro">Back to top</a></p>
+
+<hr />
+
+<p><a name="shader"></a></p>
+<h3 id="adding-a-new-shader">Adding a new shader</h3>
+
+<p>The follow naming convention is being used for shader files:</p>
+
+<p>Vertex Shaders - <code class="highlighter-rouge">myShaderName.vs.glsl</code><br />
+Fragment Shaders - <code class="highlighter-rouge">myShaderName.fs.glsl</code></p>
+
+<p>Overview of Steps</p>
+<ul>
+  <li>Create any new uniforms required for the shader, this may include creating new default values or variables for dat.GUI access</li>
+  <li>In <code class="highlighter-rouge">shaders.js</code> create the material and load the shader files</li>
+  <li>In <code class="highlighter-rouge">settings.js</code> define a new <code class="highlighter-rouge">const</code> that is used as a label to switch shaders</li>
+  <li>Optionally create a dat.GUI controller for the new shader</li>
+  <li>For the controller add the new shader to the array of shaders in <code class="highlighter-rouge">controllers.js</code></li>
+  <li>Ensure there is a menu option for the new shader in <code class="highlighter-rouge">settings.js</code></li>
+</ul>
+
+<hr />
+
+<h4 id="in-detail">In detail:</h4>
+<ol>
+  <li>
+    <p>To add a new shader place the file inside the <code class="highlighter-rouge">glsl</code> folder.</p>
+  </li>
+  <li>Inside <code class="highlighter-rouge">settings.js</code> define a new <code class="highlighter-rouge">const</code> for the shader. The shader constants are used to index into an array of shaders for switching between them.<br /><br />
+<code class="highlighter-rouge">settings.js:</code><br />
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">REFRACTION</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">MYSHADER</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Additionally, if you are creating a dat.GUI controller, add a menu option to the <code class="highlighter-rouge">shaderMenu</code> object in order to select the new shader in the controllers.<br /><br />
+The property is what is displayed in the menu and the value should be the corresponding <code class="highlighter-rouge">const</code>.
+<br /><br />
+<code class="highlighter-rouge">settings.js:</code>
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">var</span> <span class="nx">shaderMenu</span> <span class="o">=</span> <span class="p">{</span>
+           <span class="p">...</span>
+    <span class="na">MyShaderMenuName</span> <span class="p">:</span> <span class="nx">MYSHADER</span>
+    <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>In <code class="highlighter-rouge">shaders.js</code> follow the format of the code for other shaders to create the material and then load the glsl files. If you need to create any new uniforms declare them in <code class="highlighter-rouge">shaders.js</code> but all hardcoded values should be in <code class="highlighter-rouge">settings.js</code>.</p>
+  </li>
+  <li>In <code class="highlighter-rouge">controllers.js</code> build a <a href="https://github.com/dataarts/dat.gui">dat.GUI controller</a> for the new shader and add the shader to the array of shaders so that it can be switched to by the controllers. <br /><br />
+<code class="highlighter-rouge">controllers.js</code>
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">var</span> <span class="nx">myShader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">shader</span><span class="p">(</span><span class="nx">myShaderMaterial</span><span class="p">,</span> <span class="nx">myShaderGUI</span><span class="p">);</span>  
+    <span class="nx">shaders</span><span class="p">[</span><span class="nx">MYSHADER</span><span class="p">]</span> <span class="o">=</span> <span class="nx">myShader</span><span class="p">;</span>
+</code></pre></div>    </div>
+
+    <blockquote>
+      <p>Note: The initial shader and GUI displayed is Phong. The other GUIs are hidden until they are switched to.</p>
+    </blockquote>
+  </li>
+</ol>
+
+<p><br />
+<a href="#intro">Back to top</a></p>
+
+
+      </section>
+      <footer>
+        
+        <p>This project is maintained by <a href="http://github.com/k1mby">k1mby</a></p>
+        
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+
+
+  
+  </body>
+</html>

@@ -1,2 +1,5 @@
 theme: jekyll-theme-minimal
 show_downloads: true
+github:
+  zip_url: https://k1mby.github.io/teapot-demo/teapot-demo-master.zip
+  tar_url: https://k1mby.github.io/teapot-demo/teapot-demo-master.tar.gz

@@ -24,6 +24,9 @@ var resetButton = {
     lightPosition.value.y = defaults.y;
     lightPosition.value.z = defaults.z;
 
+    teapot.rotation.x = 0;
+    teapot.rotation.y = 0;
+
     // Manually set colors
     lightColor.value = new THREE.Color( color.light );
     ambientColor.value = new THREE.Color( color.ambient );

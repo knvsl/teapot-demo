@@ -55,9 +55,9 @@ loader.load('obj/teapot.obj', function(object) {
     }
   });
 
-  object.scale.x = 2;
-  object.scale.y = 2;
-  object.scale.z = 2;
+  object.scale.x = 3;
+  object.scale.y = 3;
+  object.scale.z = 3;
   object.name = 'teapot';
 
   scene.add( object );

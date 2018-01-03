@@ -226,8 +226,13 @@ anisoGUI.domElement.style.display = 'none';
 
 // REFLECTION + REFRACTION
 var reflectGUI =  new dat.GUI( { width : 400 } );
+  reflectGUI.add(resetButton, 'reset')
+  .name('RESET')
+  .onFinishChange(refreshDisplay);
+
   reflectGUI.add(settings, 'rotate')
   .name('Rotate');
+
   reflectGUI.add(settings, 'shader', {
     Phong : PHONG,
     BlinnPhong : BLINNPHONG,

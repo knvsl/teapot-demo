@@ -39,12 +39,6 @@ var color = {
 }
 
 // Cubemap Settings
-
-/*
-ft  bk
-up  dn
-rt  lf
-*/
 var cubemap = new THREE.CubeTextureLoader()
   .setPath( 'img/default/' )
   .load([

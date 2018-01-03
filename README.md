@@ -5,33 +5,21 @@ All skyboxes sourced from: http://www.custommapmakers.org/skyboxes.php
 
 ## Customize
 ### Skyboxes
-To add a new skybox the 6 images must be placed in a folder with name "your-name" and named individually with the convention below:
+To add a new skybox the 6 images must be placed in a folder "mySkyboxName" and named individually with the convention below, such that the folder name matches the starting of the image names like so:
 
-"your-name_ft.png"  
-"your-name_bk.png"  
-"your-name_up.png"  
-"your-name_dn.png"  
-"your-name_rt.png"  
-"your-name_lf.png" 
+"mySkyboxName_ft.png"  
+"mySkyboxName_bk.png"  
+"mySkyboxName_up.png"  
+"mySkyboxName_dn.png"  
+"mySkyboxName_rt.png"  
+"mySkyboxName_lf.png" 
 
-Add the skybox by placing the folder inside the "img" folder and add a thumbnail inside the html where the id is the same as "your-name"
+Add the skybox by placing the folder inside the "img" folder and add a thumbnail inside the html where the id is the same as "mySkyBoxName"
 
 Example (demo.html):
 ```html
-    <img id="your-name" onclick="updateSkybox(this.id)" src="img/your-name/your-name_lf.png" alt=""/>
+    <img id="mySkyboxName" onclick="updateSkybox(this.id)" src="img/mySkyboxName/mySkyboxName_lf.png" alt=""/>
 ```
-### Organization
-#### GLSL
-This folder contains all the custom shaders. Many of the vertex/fragment shaders are very similar but are kept individual for learning purposes
-#### JS
-
-`settings.js` Contains all the settings & default values for the demo. This is the only place you would need to change any values directly. Default settings are inside the `defaults` object.
-
-`controllers.js` Contains all the code that sets up the dat.GUI controllers. The default initial shader and GUI displayed is Phong.
-
-`helpers.js` Helper functions that the dat.GUI controllers call like the reset button, switching the shaders etc. are all located here.
-
-`shaders.js` Contains all the code that sets up and loads the custom shaders. Uniforms that are shared by the various shaders are declared at the top. 
 
 #### Add a new shader
 1. Place the file inside the `glsl` folder. 
@@ -55,6 +43,18 @@ This folder contains all the custom shaders. Many of the vertex/fragment shaders
    
    Example:
    ```javascript
-       var myshader = new shader(myshaderMaterial, myshaderGUI);  
-       shaders[MYSHADER] = myshader;
+       var myShader = new shader(myShaderMaterial, myShaderGUI);  
+       shaders[MYSHADER] = myShader;
    ```
+## Code Organization
+#### GLSL
+This folder contains all the custom shaders. Many of the vertex/fragment shaders are very similar but are kept individual for learning purposes
+#### JS
+
+`settings.js` Contains all the settings & default values for the demo. This is the only place you would need to change any values directly. Default settings are inside the `defaults` object.
+
+`controllers.js` Contains all the code that sets up the dat.GUI controllers. The default initial shader and GUI displayed is Phong.
+
+`helpers.js` Helper functions that the dat.GUI controllers call like the reset button, switching the shaders etc. are all located here.
+
+`shaders.js` Contains all the code that sets up and loads the custom shaders. Uniforms that are shared by the various shaders are declared at the top. 

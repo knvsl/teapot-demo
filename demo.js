@@ -11,7 +11,6 @@ function resizeWindow() {
 }
 
 window.addEventListener('resize', resizeWindow, false);
-window.onscroll = function() { window.scrollTo(0, 0); }
 
 // Scene
 var scene = new THREE.Scene();
@@ -21,7 +20,7 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeig
 camera.position.set(2,2,10);
 camera.lookAt( scene.position );
 
-// Controls
+// Orbit Controls
 var orbitControls = new THREE.OrbitControls(camera);
 orbitControls.damping = 0.5;
 orbitControls.autoRotate = false;

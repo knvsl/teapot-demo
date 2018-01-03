@@ -20,9 +20,9 @@ var defaults = {
     kS : 0.8,
     alphaX : 0.5,
     alphaY : 0.05,
-    x : -3,
-    y : 3,
-    z : 1
+    x : -5,
+    y : 4,
+    z : 2
 };
 
 // Object Settings

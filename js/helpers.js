@@ -20,6 +20,11 @@ var resetButton = {
     alphaX.value = defaults.alphaX;
     alphaY.value = defaults.alphaY;
 
+    lightPosition.value.x = defaults.x;
+    lightPosition.value.y = defaults.y;
+    lightPosition.value.z = defaults.z;
+
+    // Manually set colors
     lightColor.value = new THREE.Color( color.light );
     ambientColor.value = new THREE.Color( color.ambient );
     diffuseColor.value = new THREE.Color( color.diffuse );

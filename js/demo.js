@@ -38,7 +38,7 @@ light.position.set( lightPosition.value.x, lightPosition.value.y, lightPosition.
 scene.add( light );
 
 // Skybox
-var skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+var skyboxGeometry = new THREE.BoxGeometry(100, 100, 100);
 var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
 scene.add(skybox)
 

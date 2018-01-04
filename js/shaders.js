@@ -113,7 +113,7 @@ var loader = new THREE.FileLoader();
    });
 
 //////////////////
-// ANISOTROPHIC //
+// ANISOTROPIC //
 //////////////////
 
 var anisoUniforms = {
@@ -130,16 +130,16 @@ var anisoUniforms = {
   alphaY : alphaY,
 };
 
-var anisotrophicMaterial = new THREE.ShaderMaterial({
+var anisotropicMaterial = new THREE.ShaderMaterial({
   uniforms : anisoUniforms,
 });
 
 var loader = new THREE.FileLoader();
-   loader.load('glsl/anisotrophic.vs.glsl', function(shader) {
-     anisotrophicMaterial.vertexShader = shader
+   loader.load('glsl/anisotropic.vs.glsl', function(shader) {
+     anisotropicMaterial.vertexShader = shader
    });
-   loader.load('glsl/anisotrophic.fs.glsl', function(shader) {
-     anisotrophicMaterial.fragmentShader = shader
+   loader.load('glsl/anisotropic.fs.glsl', function(shader) {
+     anisotropicMaterial.fragmentShader = shader
    });
 
 ////////////////

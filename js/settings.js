@@ -4,7 +4,7 @@
 const PHONG = 0;
 const BLINNPHONG = 1;
 const LAMBERTIAN = 2;
-const ANISOTROPHIC = 3;
+const ANISOTROPIC = 3;
 const REFLECTION = 4;
 const REFRACTION = 5;
 
@@ -13,7 +13,7 @@ var shaderMenu = {
   Phong : PHONG,
   BlinnPhong : BLINNPHONG,
   Lambertian : LAMBERTIAN,
-  Anisotrophic : ANISOTROPHIC,
+  Anisotropic : ANISOTROPIC,
   Reflection : REFLECTION,
   Refraction : REFRACTION
 }

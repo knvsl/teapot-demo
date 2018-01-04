@@ -231,14 +231,14 @@ var shaders = [];
 var phong = new shader(phongMaterial, phongGUI);
 var blinnPhong = new shader(blinnPhongMaterial, phongGUI);
 var lambertian = new shader(lambertianMaterial, lambertGUI);
-var anisotrophic = new shader(anisotrophicMaterial, anisoGUI);
+var anisotropic = new shader(anisotropicMaterial, anisoGUI);
 var reflection = new shader(reflectionMaterial, reflectGUI);
 var refraction = new shader(refractionMaterial, reflectGUI);
 
 shaders[PHONG] = phong;
 shaders[BLINNPHONG] = blinnPhong;
 shaders[LAMBERTIAN] = lambertian;
-shaders[ANISOTROPHIC] = anisotrophic;
+shaders[ANISOTROPIC] = anisotropic;
 shaders[REFLECTION] = reflection;
 shaders[REFRACTION] = refraction;
 

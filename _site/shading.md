@@ -1,4 +1,4 @@
-<a name="shading"></a>
+<a name="top"></a>
 ## Shading Models
 
 Each of the sections below include a brief overview of the following shading models, including the code implementation.
@@ -19,7 +19,7 @@ __________
 <a name="lambertian"></a>
 ### Lambertian Shading
 
-Also known as diffuse shading, [Lambertian](https://en.wikipedia.org/wiki/Lambertian_reflectance) surfaces are typically recognized as 'matte' surfaces. These are surfaces that reflect light equally in all directions.
+Also known as diffuse shading, [Lambertian](https://en.wikipedia.org/wiki/Lambertian_reflectance) surfaces are 'matte' surfaces. These are surfaces that reflect light equally in all directions.
 
 The name Lambertian refers to Lambert's Cosine Law which is used to calculate the color of a diffuse surface. Lambert's Cosine Law says that the amount of light on a surface is equal to the cosine of the angle between the light direction and the surface normal. It is independent of where the viewer is.
 
@@ -36,9 +36,9 @@ uniform vec3 lightPosition;
 uniform float kD;
 ```
 
-We pass in the lights position to calculate the light direction. You could also pass in the light direction vector. We define some additional uniforms. `kD` is the diffuse intensity, `diffuseColor` is the color of the surface under light, and `lightColor` represents the color of the light itself.
+We pass in the lights position to calculate the light direction. We also define some additional uniforms. `kD` is the diffuse intensity, `diffuseColor` is the color of the surface under the light, and `lightColor` represents the color of the light itself.
 
-We also define two varying variables, `vLight` will hold our light direction vector and `vNormal` will hold our normal in the proper coordinates.
+We also define two varying variables, `vLight` will hold our light direction vector and `vNormal` will hold our normal.
 
 ```glsl
 varying vec3 vLight;
@@ -52,7 +52,7 @@ First we compute the light direction vector. The `position` attribute is built-i
    vec3 lightDirection = lightPosition - worldPosition;
 ```
 
-Then we transform to eye coordinates and set our varying variables
+Then we transform both vectors to eye coordinates and set our varying variables.
 
 ```glsl
 vLight = vec3(viewMatrix * vec4(lightDirection, 0.0));
@@ -69,29 +69,30 @@ After making sure the vectors are normalized we can calculate the diffuse term u
 float diffuse = max(0.0, dot(l,n));
 ```
 
-Finally to compute our final diffuse light we multiply the diffuse intensity, diffuse color, diffuse term, and light color.
+Finally to compute our diffuse light we multiply the diffuse intensity, diffuse color, diffuse term, and light color.
 
 ```glsl
 vec3 diffuseLight = kD * diffuseColor * diffuse * lightColor;
 ```
 
 The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/lambertian.fs.glsl)
-<br><br>
 <br>
-[Back to top](#shading)
+<br>
+<br>
+[Back to top](#top)
 
 ______
 
 <a name="phong"></a>
 ### Phong
 
-The [Phong reflection model](https://en.wikipedia.org/wiki/Phong_reflection_model) computes light as a sum of ambient, diffuse, and specular terms. Phong shading reflects how shiny surfaces have intense highlights while rough or dull surfaces tend to have more diffused highlights.
+The [Phong reflection model](https://en.wikipedia.org/wiki/Phong_reflection_model) computes light as a sum of ambient, diffuse, and specular terms. Phong shading emphasizes how shiny surfaces have intense highlights while rough or dull surfaces tend to have more diffused highlights.
 
-Ambient lighting represents light throughout the scene, coming from all directions. Ambient lighting is uniform and gives a certain level of brightness.
+Ambient lighting represents light throughout the scene, coming from all directions. It gives a certain level of uniform brightness.
 
 Diffuse light is the same as in Lambertian shading, it is direct light hitting a surface and reflected uniformly in all directions.
 
-Specular light is the bright highlight seen on shiny surfaces. Specular highlights are the concentrated reflection of light in specific area.
+Specular light is the bright highlight seen on shiny surfaces. Specular highlights are the concentrated reflection of light in a specific area.
 
 #### Vertex Shader
 
@@ -155,9 +156,10 @@ vec3 totalLight = ambientLight + diffuseLight + specularLight;
 ```
 
 The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/phong.fs.glsl)
-<br><br>
 <br>
-[Back to top](#shading)
+<br>
+<br>
+[Back to top](#top)
 
 _______
 
@@ -194,9 +196,10 @@ float specular = pow(max(0.0, dot(h,n)), shininess);
 As before we sum our ambient, diffuse, and newly calculated specular terms to get the final result.
 
 The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/blinn_phong.fs.glsl)
-<br><br>
 <br>
-[Back to top](#shading)
+<br>
+<br>
+[Back to top](#top)
 
 _____
 
@@ -251,7 +254,7 @@ float specular = sqrt(max(ln/vn, 0.0))
 As usual we use this new specular term to compute our specular light. Finally we sum the ambient, diffuse and specular light to get our final result.
 
 The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/anisotropic.vs.glsl)
-<br><br>
-
 <br>
-[Back to top](#shading)
+<br>
+<br>
+[Back to top](#top)

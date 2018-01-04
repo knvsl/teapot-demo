@@ -111,7 +111,6 @@ ____
     <img id="mySkyboxName" onclick="updateSkybox(this.id)" src="img/mySkyboxName/mySkyboxName_lf.png" alt=""/>
 ```
 <br>
-<br>
 [Back to top](#intro)
 
 ________

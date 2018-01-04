@@ -13,7 +13,10 @@ All skyboxes sourced from: [Custom Map Makers](http://www.custommapmakers.org/sk
 <br>
 <br>
 
-
 ## Getting Started
 
 To setup and modify the demo checkout the guidelines in [Getting Started](https://k1mby.github.io/teapot-demo/intro.html)
+
+_______
+
+## Useful Resources

@@ -16,7 +16,7 @@
 <!-- End Jekyll SEO tag -->
 
 
-    <link rel="stylesheet" href="/assets/css/style.css?v=04754b32074248d25bed88dcdd96da21be0c45f1">
+    <link rel="stylesheet" href="/assets/css/style.css?v=dbe4d5f15462f2682cbddadb9f969e16c72e6e7b">
     <meta name="viewport" content="width=device-width">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -52,7 +52,105 @@
       </header>
       <section>
 
-      
+      <p><a name="top"></a></p>
+<h2 id="environment-mapping">Environment Mapping</h2>
+
+<p>Environment mapping or <a href="https://en.wikipedia.org/wiki/Reflection_mapping">reflection mapping</a> uses texture mapping to create the appearance of reflections on surfaces. In this demo we first set up a skybox for our background. We can then implement reflection and refraction by sampling the cubemap texture, this is known as cubemapping.</p>
+
+<p><strong>Jump to Section</strong>:</p>
+
+<p><a href="#skybox">Skybox</a><br />
+<a href="#reflection">Reflection</a><br />
+<a href="#refraction">Refraction</a></p>
+
+<p><a href="./">Back to main</a>
+<br />
+<br /></p>
+
+<hr />
+
+<p><a name="skybox"></a></p>
+<h3 id="skybox">Skybox</h3>
+
+<p>A skybox is essentially a cube that surrounds the scene. The six inner walls of the cube then act as a distant background. Setting up the skybox requires a bit more than just creating uniforms so included below is some of the Javascript in addition to the shader code.</p>
+
+<p>To set up the skybox we need the images that will be used for the cubemap. All of the skyboxes in the demo are from <a href="http://www.custommapmakers.org/skyboxes.php">Custom Map Makers</a>. We need six images to represent the six sides of the skybox.</p>
+
+<p>The last two characters in the image name identify which side of the cube that particular image corresponds to, for example the image below is the front face of the whirlpool cubemap.</p>
+
+<p><code class="highlighter-rouge">whirlpool_ft.png</code></p>
+
+<p>We use ft, bk, up, down, rt, lf to represent front, back, up, down, right, and left respectively.</p>
+
+<p>We need to be sure to load the images in the right order so the cube is assembled properly. We will do this using Three.js <code class="highlighter-rouge">CubeTextureLoader()</code>. The order the images should be loaded in is specified as follows:</p>
+
+<p><code class="highlighter-rouge">px.png</code><br />
+		<code class="highlighter-rouge">nx.png</code><br />
+		<code class="highlighter-rouge">py.png</code><br />
+		<code class="highlighter-rouge">ny.png</code><br />
+		<code class="highlighter-rouge">pz.png</code><br />
+		<code class="highlighter-rouge">nz.png</code></p>
+
+<p>Where px corresponds to positive x, nx corresponds to negative x and so on. To clarify:</p>
+
+<p><code class="highlighter-rouge">positive x = front</code><br />
+<code class="highlighter-rouge">negative x = back</code><br />
+<code class="highlighter-rouge">positive y = up</code><br />
+<code class="highlighter-rouge">negative y = down</code><br />
+<code class="highlighter-rouge">positive z = right</code><br />
+<code class="highlighter-rouge">negative z = left</code></p>
+
+<p>We load the cubemap as below and then pass this to the shader as a uniform.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">cubemap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">CubeTextureLoader</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">setPath</span><span class="p">(</span> <span class="s1">'img/whirlpool/'</span> <span class="p">)</span>
+  <span class="p">.</span><span class="nx">load</span><span class="p">([</span>
+    <span class="s1">'whirlpool_ft.png'</span><span class="p">,</span> <span class="s1">'whirlpool_bk.png'</span><span class="p">,</span>
+    <span class="s1">'whirlpool_up.png'</span><span class="p">,</span> <span class="s1">'whirlpool_dn.png'</span><span class="p">,</span>
+    <span class="s1">'whirlpool_rt.png'</span><span class="p">,</span> <span class="s1">'whirlpool_lf.png'</span>
+  <span class="p">]);</span>
+</code></pre></div></div>
+
+<p>The other thing we need to do in our Javascript is create the actual cube geometry. We can do this using the Three.js <code class="highlighter-rouge">BoxGeometry()</code>. One thing to note is that the size of the box won’t change how it looks, it just needs to be large enough to account for where things in the scene are positioned.</p>
+
+<h3 id="vertex-shader">Vertex Shader</h3>
+
+<p>Our skybox shader has one uniform which is the cubemap we loaded. The <code class="highlighter-rouge">glsl</code> type <code class="highlighter-rouge">samplerCube</code> is for holding cubemap textures. We also define a varying variable <code class="highlighter-rouge">vPosition</code> which is our position vector.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">uniform</span> <span class="kt">samplerCube</span> <span class="n">skybox</span><span class="p">;</span>
+<span class="k">varying</span> <span class="kt">vec3</span> <span class="n">vPosition</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>We set <code class="highlighter-rouge">vPosition</code> as our position in world coordinates. We can use these world coordinates of our cube as our texture coordinates to color the faces of the box.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vPosition</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="n">modelMatrix</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p>The last thing we need to do is ensure that we always remain inside the skybox. We don’t want to be able to zoom past it or go outside our background. A simple way to do this is to move with the camera, so we always remain inside the skybox. To do this we can alter our output of <code class="highlighter-rouge">gl_Position</code></p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">projectionMatrix</span> <span class="o">*</span> <span class="n">viewMatrix</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">position</span> <span class="o">+</span> <span class="n">cameraPosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.vs.glsl">here</a></p>
+
+<h3 id="fragment-shader">Fragment Shader</h3>
+
+<p>Our fragment shader is quite simple as well. <code class="highlighter-rouge">glsl</code> provides the <code class="highlighter-rouge">textureCube()</code> function that samples a cubemap texture for us. We use our <code class="highlighter-rouge">vPosition</code> as the texture coordinates.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec4</span> <span class="n">color</span> <span class="o">=</span> <span class="n">textureCube</span><span class="p">(</span><span class="n">skybox</span><span class="p">,</span> <span class="n">vPosition</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.fs.glsl">here</a></p>
+
+<p><br />
+<br />
+<br />
+<a href="#top">Back to top</a></p>
+
+<hr />
+
+<p><a name="reflection"></a></p>
+<h3 id="reflection">Reflection</h3>
 
 
       </section>

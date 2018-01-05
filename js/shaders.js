@@ -13,6 +13,7 @@ var kD = { type: 'f', value: defaults.kD };
 var kS = { type: 'f', value: defaults.kS };
 var alphaX = { type: 'f', value: defaults.alphaX };
 var alphaY = { type: 'f', value: defaults.alphaY };
+var index = { type: 'f', value: defaults.index };
 
 ////////////
 // SKYBOX //
@@ -20,7 +21,7 @@ var alphaY = { type: 'f', value: defaults.alphaY };
 
 var skyboxMaterial = new THREE.ShaderMaterial({
   uniforms: {
-    skybox: { type: "t", value: cubemap },
+    skybox: { type: "t", value: cubemap }
   },
   side: THREE.DoubleSide
 })
@@ -50,7 +51,7 @@ var phongUniforms = {
 };
 
 var phongMaterial = new THREE.ShaderMaterial({
-  uniforms : phongUniforms,
+  uniforms : phongUniforms
 });
 
 var loader = new THREE.FileLoader();
@@ -78,7 +79,7 @@ var blinnPhongUniforms = {
 };
 
 var blinnPhongMaterial = new THREE.ShaderMaterial({
-  uniforms : blinnPhongUniforms,
+  uniforms : blinnPhongUniforms
 });
 
 var loader = new THREE.FileLoader();
@@ -101,7 +102,7 @@ var lambertUniforms = {
 };
 
 var lambertianMaterial = new THREE.ShaderMaterial({
-  uniforms : lambertUniforms,
+  uniforms : lambertUniforms
 });
 
 var loader = new THREE.FileLoader();
@@ -131,7 +132,7 @@ var anisoUniforms = {
 };
 
 var anisotropicMaterial = new THREE.ShaderMaterial({
-  uniforms : anisoUniforms,
+  uniforms : anisoUniforms
 });
 
 var loader = new THREE.FileLoader();
@@ -148,7 +149,7 @@ var loader = new THREE.FileLoader();
 
 var reflectionMaterial = new THREE.ShaderMaterial({
   uniforms: {
-    skybox: { type: "t", value: cubemap },
+    skybox: { type: "t", value: cubemap }
   },
   side: THREE.DoubleSide
 })
@@ -169,6 +170,7 @@ var loader = new THREE.FileLoader();
 var refractionMaterial = new THREE.ShaderMaterial({
   uniforms: {
     skybox: { type: "t", value: cubemap },
+    index: index
   },
   side: THREE.DoubleSide
 })

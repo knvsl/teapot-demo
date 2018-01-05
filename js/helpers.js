@@ -120,19 +120,20 @@ function setMaterial (object, material) {
 }
 
 // Change the skybox
-function updateSkybox(skybox) {
+function updateSkybox(image) {
 
-  var dir = 'img/' + skybox + '/';
+  var dir = 'img/' + image + '/';
 
   cubemap = new THREE.CubeTextureLoader()
     .setPath( dir )
     .load([
-      skybox + '_ft.png', skybox + '_bk.png',
-      skybox + '_up.png', skybox + '_dn.png ',
-      skybox + '_rt.png', skybox + '_lf.png'
+      image + '_ft.png', image + '_bk.png',
+      image + '_up.png', image + '_dn.png ',
+      image + '_rt.png', image + '_lf.png'
     ]);
 
   skyboxMaterial.uniforms.skybox.value = cubemap;
   reflectionMaterial.uniforms.skybox.value = cubemap;
   refractionMaterial.uniforms.skybox.value = cubemap;
+
 }

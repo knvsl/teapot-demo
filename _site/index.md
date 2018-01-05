@@ -20,3 +20,18 @@ To setup and modify the demo checkout the guidelines in [Getting Started](https:
 _______
 
 ## Useful Resources
+
+Three.js  
+[https://threejs.org/](https://threejs.org/)
+
+dat.GUI  
+[https://github.com/dataarts/dat.gui](https://github.com/dataarts/dat.gui)
+
+A list of GLSL functions  
+[http://www.shaderific.com/glsl-functions/](http://www.shaderific.com/glsl-functions/)  
+
+Graphics tutorials covering many of the techniques used in the demo
+[https://www.scratchapixel.com/](https://www.scratchapixel.com/)
+
+OpenGL tutorials  
+[http://www.opengl-tutorial.org/](http://www.opengl-tutorial.org/)

@@ -53,9 +53,9 @@ var color = {
 
 // Cubemap Settings
 var cubemap = new THREE.CubeTextureLoader()
-  .setPath( 'img/default/' )
+  .setPath( 'img/iceflats/' )
   .load([
-    'default_ft.png', 'default_bk.png',
-    'default_up.png', 'default_dn.png',
-    'default_rt.png', 'default_lf.png'
+    'iceflats_ft.png', 'iceflats_bk.png',
+    'iceflats_up.png', 'iceflats_dn.png',
+    'iceflats_rt.png', 'iceflats_lf.png'
   ]);

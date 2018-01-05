@@ -16,7 +16,7 @@
 <!-- End Jekyll SEO tag -->
 
 
-    <link rel="stylesheet" href="/assets/css/style.css?v=a6e29acfec095a0165bd1fc6f5e3adef2721b1c8">
+    <link rel="stylesheet" href="/assets/css/style.css?v=87099e26abd0eb19f2d2e5326a184164474baeeb">
     <meta name="viewport" content="width=device-width">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -140,9 +140,8 @@
 <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec4</span> <span class="n">color</span> <span class="o">=</span> <span class="n">textureCube</span><span class="p">(</span><span class="n">skybox</span><span class="p">,</span> <span class="n">vPosition</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.fs.glsl">here</a></p>
-
-<p><br />
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.fs.glsl">here</a>
+<br />
 <br />
 <br />
 <a href="#top">Back to top</a></p>
@@ -151,6 +150,45 @@
 
 <p><a name="reflection"></a></p>
 <h3 id="reflection">Reflection</h3>
+
+<p>The general idea behind the reflection shader is that we can calculate the bounce vector or reflection vector and then use this to sample our cubemap. The bounce vector points towards the area that you would see in a mirror, the result is a surface that looks like it is reflecting the skybox.</p>
+
+<h4 id="vertex-shader-1">Vertex Shader</h4>
+
+<p>Our reflection vector is calculated using <a href="http://mathforum.org/mathimages/index.php/Snell's_Law#Reflection_of_Light">Snell’s Law</a>. We need the normal and our position, we also define the skybox as a uniform.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">uniform</span> <span class="kt">samplerCube</span> <span class="n">skybox</span><span class="p">;</span>
+<span class="k">varying</span> <span class="kt">vec3</span> <span class="n">vNormal</span><span class="p">;</span>
+<span class="k">varying</span> <span class="kt">vec3</span> <span class="n">vPosition</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>As usual we set our varying variables to pass to the fragment shader.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vNormal</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="n">modelMatrix</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
+<span class="n">vPosition</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="n">modelMatrix</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.vs.glsl">here</a></p>
+
+<h3 id="fragment-shader-1">Fragment Shader</h3>
+
+<p>In the fragment shader we need to calculate the bounce vector and then use this to sample our cubemap. OpenGL provides a <code class="highlighter-rouge">reflect()</code> function that returns the bounce vector given a normal and and incident vector (view vector). Below is how to calculate the bounce vector by hand.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kt">vec3</span> <span class="n">b</span> <span class="o">=</span> <span class="o">-</span><span class="n">v</span> <span class="o">+</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Lastly we simply sample the cubemap using the bounce vector.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec4</span> <span class="n">color</span> <span class="o">=</span> <span class="n">textureCube</span><span class="p">(</span><span class="n">skybox</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.fs.glsl">here</a>
+<br />
+<br />
+<br />
+<a href="#top">Back to top</a></p>
+
+<hr />
 
 
       </section>

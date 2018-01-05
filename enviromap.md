@@ -94,7 +94,6 @@ vec4 color = textureCube(skybox, vPosition);
 ```
 
 The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.fs.glsl)
-
 <br>
 <br>
 <br>
@@ -104,3 +103,46 @@ ______
 
 <a name="reflection"></a>
 ### Reflection
+
+The general idea behind the reflection shader is that we can calculate the bounce vector or reflection vector and then use this to sample our cubemap. The bounce vector points towards the area that you would see in a mirror, the result is a surface that looks like it is reflecting the skybox.
+
+#### Vertex Shader
+
+Our reflection vector is calculated using [Snell's Law](http://mathforum.org/mathimages/index.php/Snell's_Law#Reflection_of_Light). We need the normal and our position, we also define the skybox as a uniform.
+
+```glsl
+uniform samplerCube skybox;
+varying vec3 vNormal;
+varying vec3 vPosition;
+```
+
+As usual we set our varying variables to pass to the fragment shader.
+
+```glsl
+vNormal = vec3(modelMatrix * vec4(normal, 0.0));
+vPosition = vec3(modelMatrix * vec4(position, 1.0));
+```
+
+The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.vs.glsl)
+
+### Fragment Shader
+
+In the fragment shader we need to calculate the bounce vector and then use this to sample our cubemap. OpenGL provides a `reflect()` function that returns the bounce vector given a normal and and incident vector (view vector). Below is how to calculate the bounce vector by hand.
+
+```glsl
+	vec3 b = -v + 2.0 * dot(v,n) * n;
+```
+
+Lastly we simply sample the cubemap using the bounce vector.
+
+```glsl
+vec4 color = textureCube(skybox, b);
+```
+
+The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.fs.glsl)
+<br>
+<br>
+<br>
+[Back to top](#top)
+
+______

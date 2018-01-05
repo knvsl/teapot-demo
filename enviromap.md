@@ -108,7 +108,7 @@ The general idea behind the reflection shader is that we can calculate the bounc
 
 #### Vertex Shader
 
-Our reflection vector is calculated using [Snell's Law](http://mathforum.org/mathimages/index.php/Snell's_Law#Reflection_of_Light). We need the normal and our position, we also define the skybox as a uniform.
+To calculate our reflected vector we need a view vector and our surface normal, we can use the negative of our position as our view vector. We also define the skybox as a uniform.
 
 ```glsl
 uniform samplerCube skybox;
@@ -125,7 +125,7 @@ vPosition = vec3(modelMatrix * vec4(position, 1.0));
 
 The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.vs.glsl)
 
-### Fragment Shader
+#### Fragment Shader
 
 In the fragment shader we need to calculate the bounce vector and then use this to sample our cubemap. OpenGL provides a `reflect()` function that returns the bounce vector given a normal and and incident vector (view vector). Below is how to calculate the bounce vector by hand.
 
@@ -146,3 +146,41 @@ The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/mast
 [Back to top](#top)
 
 ______
+
+### Refraction
+
+We'll use [Snell's Law](https://en.wikipedia.org/wiki/Snell%27s_law) for our [refraction](https://en.wikipedia.org/wiki/Refraction) shader. Snell's law describes how to calculate the change in vector direction as it goes through a material. An example would be the way light bends as it travels though water or a glass.
+
+#### Vertex Shader
+
+Our vertex shader is the same as reflection. We just need to pass the surface normal and our position to the fragment shader. In addition to defining the skybox as a uniform, we will also define a uniform to control the [refractive index](https://en.wikipedia.org/wiki/Refractive_index). Transparent materials have a refractive index between 1 and 2.
+
+```glsl
+uniform float index;
+```
+
+The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/refraction.vs.glsl)
+
+#### Fragment Shader
+
+As with reflection, OpenGL also provides a `refract()` function that, given the incidence (our view vector), normal, and refractive index returns the refraction direction. Below we show how to calculate this by hand.
+
+After normalizing our vectors we first calculate the angle of refraction, which describes how much the light bends.
+
+```glsl
+float angle = 1.0 - pow(index, 2.0) * (1.0 - pow(dot(n, v), 2.0));
+```
+
+Then we calculate our refracted vector using Snell's Law.
+
+```glsl
+if (angle < 0.0)
+     r = vec3(0.0, 0.0, 0.0);
+ else
+     r = index * v - (index * dot(n, v) + sqrt(angle)) * n;
+```
+The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/refraction.fs.glsl)
+<br>
+<br>
+<br>
+[Back to top](#top)

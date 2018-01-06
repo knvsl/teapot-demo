@@ -26,7 +26,7 @@ To run the demo locally you can use node.js `http-server` or something alike.
 
 Your browser must support WebGL. Firefox and Chrome are recommended.
 
->Note: Firefox or Chrome are recommended. Not tested on IE.
+>Note: Firefox or Chrome are recommended
 >
 There is a known warning in Safari and some older versions of Chrome and Firefox, see [here](https://github.com/mrdoob/three.js/issues/9716) if you encounter this:<br>
 `WARNING: 0:1: extension 'GL_ARB_gpu_shader5' is not supported`<br>

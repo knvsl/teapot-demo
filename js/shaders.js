@@ -27,10 +27,10 @@ var skyboxMaterial = new THREE.ShaderMaterial({
 })
 
 var loader = new THREE.FileLoader();
-   loader.load('glsl/skybox.vs.glsl', function(shader) {
+   loader.load('shaders/skybox.vs.glsl', function(shader) {
      skyboxMaterial.vertexShader = shader
    });
-   loader.load('glsl/skybox.fs.glsl', function(shader) {
+   loader.load('shaders/skybox.fs.glsl', function(shader) {
      skyboxMaterial.fragmentShader = shader
    });
 
@@ -55,10 +55,10 @@ var phongMaterial = new THREE.ShaderMaterial({
 });
 
 var loader = new THREE.FileLoader();
-   loader.load('glsl/phong.vs.glsl', function(shader) {
+   loader.load('shaders/phong.vs.glsl', function(shader) {
      phongMaterial.vertexShader = shader
    });
-   loader.load('glsl/phong.fs.glsl', function(shader) {
+   loader.load('shaders/phong.fs.glsl', function(shader) {
      phongMaterial.fragmentShader = shader
    });
 
@@ -83,10 +83,10 @@ var blinnPhongMaterial = new THREE.ShaderMaterial({
 });
 
 var loader = new THREE.FileLoader();
-   loader.load('glsl/blinn_phong.vs.glsl', function(shader) {
+   loader.load('shaders/blinn_phong.vs.glsl', function(shader) {
      blinnPhongMaterial.vertexShader = shader
    });
-   loader.load('glsl/blinn_phong.fs.glsl', function(shader) {
+   loader.load('shaders/blinn_phong.fs.glsl', function(shader) {
      blinnPhongMaterial.fragmentShader = shader
    });
 
@@ -106,10 +106,10 @@ var lambertianMaterial = new THREE.ShaderMaterial({
 });
 
 var loader = new THREE.FileLoader();
-   loader.load('glsl/lambertian.vs.glsl', function(shader) {
+   loader.load('shaders/lambertian.vs.glsl', function(shader) {
      lambertianMaterial.vertexShader = shader
    });
-   loader.load('glsl/lambertian.fs.glsl', function(shader) {
+   loader.load('shaders/lambertian.fs.glsl', function(shader) {
      lambertianMaterial.fragmentShader = shader
    });
 
@@ -136,10 +136,10 @@ var anisotropicMaterial = new THREE.ShaderMaterial({
 });
 
 var loader = new THREE.FileLoader();
-   loader.load('glsl/anisotropic.vs.glsl', function(shader) {
+   loader.load('shaders/anisotropic.vs.glsl', function(shader) {
      anisotropicMaterial.vertexShader = shader
    });
-   loader.load('glsl/anisotropic.fs.glsl', function(shader) {
+   loader.load('shaders/anisotropic.fs.glsl', function(shader) {
      anisotropicMaterial.fragmentShader = shader
    });
 
@@ -155,10 +155,10 @@ var reflectionMaterial = new THREE.ShaderMaterial({
 })
 
 var loader = new THREE.FileLoader();
-  loader.load('glsl/reflection.vs.glsl', function(shader) {
+  loader.load('shaders/reflection.vs.glsl', function(shader) {
     reflectionMaterial.vertexShader = shader
   });
-  loader.load('glsl/reflection.fs.glsl', function(shader) {
+  loader.load('shaders/reflection.fs.glsl', function(shader) {
     reflectionMaterial.fragmentShader = shader
   });
 
@@ -176,9 +176,9 @@ var refractionMaterial = new THREE.ShaderMaterial({
 })
 
 var loader = new THREE.FileLoader();
-   loader.load('glsl/refraction.vs.glsl', function(shader) {
+   loader.load('shaders/refraction.vs.glsl', function(shader) {
      refractionMaterial.vertexShader = shader
    });
-   loader.load('glsl/refraction.fs.glsl', function(shader) {
+   loader.load('shaders/refraction.fs.glsl', function(shader) {
      refractionMaterial.fragmentShader = shader
    });

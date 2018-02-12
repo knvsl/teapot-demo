@@ -6,9 +6,8 @@ All skyboxes sourced from: [Custom Map Makers](http://www.custommapmakers.org/sk
 
 
 <p align="center">
-<img src="https://github.com/k1mby/teapot-demo/raw/gh-pages/src/img/screenshot.jpg" width="400px">
+<img src="src/img/screenshot.jpg" width="400px">
 </p>
->Note: Not tested on IE or Edge
 
 <br>
 <br>

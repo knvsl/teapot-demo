@@ -26,7 +26,7 @@ To run the demo locally you can use node.js `http-server` or something alike.
 
 Your browser must support WebGL. Firefox and Chrome are recommended.
 
->Note: Firefox or Chrome are recommended. Not tested on IE.
+>Note: Firefox or Chrome are recommended
 >
 There is a known warning in Safari and some older versions of Chrome and Firefox, see [here](https://github.com/mrdoob/three.js/issues/9716) if you encounter this:<br>
 `WARNING: 0:1: extension 'GL_ARB_gpu_shader5' is not supported`<br>
@@ -58,7 +58,7 @@ ____
 <a name="organization"></a>
 ### Organization
 
-#### glsl
+#### shaders
 This folder contains all the custom shaders.
 
 #### img
@@ -134,7 +134,7 @@ Overview of Steps
 ________
 
 #### In detail:
-1. To add a new shader place the file inside the `glsl` folder.
+1. To add a new shader place the file inside the `shaders` folder.
 
 2. Inside `settings.js` define a new `const` for the shader. The shader constants are used to index into an array of shaders for switching between them.<br><br>
 `settings.js:`<br>

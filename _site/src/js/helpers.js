@@ -19,6 +19,7 @@ var resetButton = {
     kS.value = defaults.kS;
     alphaX.value = defaults.alphaX;
     alphaY.value = defaults.alphaY;
+    index.value = defaults.index;
 
     lightPosition.value.x = defaults.x;
     lightPosition.value.y = defaults.y;

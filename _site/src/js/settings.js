@@ -30,6 +30,7 @@ var defaults = {
     kS : 0.8,
     alphaX : 0.5,
     alphaY : 0.05,
+    index : 1.0,
     x : -5,
     y : 4,
     z : 2

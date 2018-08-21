@@ -8,7 +8,7 @@ Each of the sections below include a brief overview of the following shading mod
 [Lambertian](#lambertian)  
 [Phong](#phong)  
 [Blinn-Phong](#bphong)  
-[Anisotrophic](#aniso)  
+[Anisotropic](#aniso)  
 
 [Back to main](./)
 <br>

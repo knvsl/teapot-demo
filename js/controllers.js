@@ -86,9 +86,9 @@ var lambertGUI = new dat.GUI( { width : 400 } );
   .name('Rotate');
 
   lambertGUI.add(settings, 'shader', shaderMenu )
-    .name('Shader')
-    .onChange(updateShader)
-    .listen();
+  .name('Shader')
+  .onChange(updateShader)
+  .listen();
 
   lambertGUI.addColor(color, 'light' )
   .name('Light Color')
@@ -136,9 +136,9 @@ var anisoGUI = new dat.GUI( { width : 400 } );
   .name('Rotate');
 
   anisoGUI.add(settings, 'shader', shaderMenu )
-    .name('Shader')
-    .onChange(updateShader)
-    .listen();
+  .name('Shader')
+  .onChange(updateShader)
+  .listen();
 
   anisoGUI.addColor(color, 'light' )
   .name('Light Color')
@@ -215,9 +215,9 @@ var reflectGUI =  new dat.GUI( { width : 400 } );
   .name('Rotate');
 
   reflectGUI.add(settings, 'shader', shaderMenu )
-    .name('Shader')
-    .onChange(updateShader)
-    .listen();
+  .name('Shader')
+  .onChange(updateShader)
+  .listen();
 
 // Hide at start
 reflectGUI.domElement.style.display = 'none';
@@ -232,9 +232,9 @@ var refractGUI =  new dat.GUI( { width : 400 } );
   .name('Rotate');
 
   refractGUI.add(settings, 'shader', shaderMenu )
-    .name('Shader')
-    .onChange(updateShader)
-    .listen();
+  .name('Shader')
+  .onChange(updateShader)
+  .listen();
 
   // Uniforms Folder
   var uniforms = refractGUI.addFolder('Uniforms');
@@ -246,9 +246,9 @@ var refractGUI =  new dat.GUI( { width : 400 } );
 // Hide at start
 refractGUI.domElement.style.display = 'none';
 
-//////////////////
-// Init Shaders //
-//////////////////
+//////////////////////
+// Init Shader GUIs //
+//////////////////////
 
 var shaders = [];
 

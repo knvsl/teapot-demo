@@ -1,4 +1,6 @@
-A graphics demo using Three.js and dat.GUI. Try out the demo or download the source and run it locally!
+### A graphics demo using Three.js and dat.GUI. 
+
+### Try it out [live](https://k1mby.github.io/teapot-demo/src/demo.html) or download the source and run it locally!
 
 See the documentation for an overview of the implementation.
 

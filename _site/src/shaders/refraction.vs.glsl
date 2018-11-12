@@ -1,4 +1,5 @@
 uniform samplerCube skybox;
+uniform float index;
 
 varying vec3 vNormal;
 varying vec3 vPosition;

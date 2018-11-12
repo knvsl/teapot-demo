@@ -58,7 +58,7 @@ ____
 <a name="organization"></a>
 ### Organization
 
-#### glsl
+#### shaders
 This folder contains all the custom shaders.
 
 #### img
@@ -134,7 +134,7 @@ Overview of Steps
 ________
 
 #### In detail:
-1. To add a new shader place the file inside the `glsl` folder.
+1. To add a new shader place the file inside the `shaders` folder.
 
 2. Inside `settings.js` define a new `const` for the shader. The shader constants are used to index into an array of shaders for switching between them.<br><br>
 `settings.js:`<br>

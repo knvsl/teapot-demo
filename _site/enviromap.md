@@ -83,17 +83,17 @@ The last thing we need to do is ensure that we always remain inside the skybox. 
 gl_Position = projectionMatrix * viewMatrix * vec4(position + cameraPosition, 1.0);
 ```
 
-The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.vs.glsl)
+The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/skybox.vs.glsl)
 
 ### Fragment Shader
 
-Our fragment shader is quite simple as well. `glsl` provides the `textureCube()` function that samples a cubemap texture for us. We use our `vPosition` as the texture coordinates.
+Our fragment shader is quite simple as well. `glsl` provides the `textureCube()` function that samples a cubemap texture for us. `textureCube()` takes in a cubemap and a `vec3` coordinate. It returns a texel, or the color at the given coordinate. We will use our world coordinates as the texture coordinates in this case which means that we're coloring our box geometry according to the six faces of our cubemap.
 
 ```glsl
 vec4 color = textureCube(skybox, vPosition);
 ```
 
-The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.fs.glsl)
+The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/skybox.fs.glsl)
 <br>
 <br>
 <br>
@@ -106,9 +106,11 @@ ______
 
 The general idea behind the reflection shader is that we can calculate the bounce vector or reflection vector and then use this to sample our cubemap. The bounce vector points towards the area that you would see in a mirror, the result is a surface that looks like it is reflecting the skybox.
 
+The bounce vector can be imagined as bouncing off our surface and pointing in the direction of some area of the cubemap. Where the bounce vector points then determines the color of the surface.
+
 #### Vertex Shader
 
-Our reflection vector is calculated using [Snell's Law](http://mathforum.org/mathimages/index.php/Snell's_Law#Reflection_of_Light). We need the normal and our position, we also define the skybox as a uniform.
+To calculate our bounce or reflected vector, we need a view vector and our surface normal, we can use the negative of our position as our view vector. We also define the skybox as a uniform.
 
 ```glsl
 uniform samplerCube skybox;
@@ -123,11 +125,11 @@ vNormal = vec3(modelMatrix * vec4(normal, 0.0));
 vPosition = vec3(modelMatrix * vec4(position, 1.0));
 ```
 
-The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.vs.glsl)
+The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/reflection.vs.glsl)
 
-### Fragment Shader
+#### Fragment Shader
 
-In the fragment shader we need to calculate the bounce vector and then use this to sample our cubemap. OpenGL provides a `reflect()` function that returns the bounce vector given a normal and and incident vector (view vector). Below is how to calculate the bounce vector by hand.
+In the fragment shader we need to calculate the bounce vector and then use this to sample our cubemap. OpenGL provides a `reflect()` function that returns the bounce vector given a normal and and incident vector (our view vector). Below is how to calculate the bounce vector by hand.
 
 ```glsl
 	vec3 b = -v + 2.0 * dot(v,n) * n;
@@ -139,10 +141,48 @@ Lastly we simply sample the cubemap using the bounce vector.
 vec4 color = textureCube(skybox, b);
 ```
 
-The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.fs.glsl)
+The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/reflection.fs.glsl)
 <br>
 <br>
 <br>
 [Back to top](#top)
 
 ______
+
+### Refraction
+
+We'll use [Snell's Law](https://en.wikipedia.org/wiki/Snell%27s_law) for our [refraction](https://en.wikipedia.org/wiki/Refraction) shader. Snell's law describes how to calculate the change in vector direction as it goes through a material. For example, the way light bends as it travels though water or a glass.
+
+#### Vertex Shader
+
+Our vertex shader is the same as reflection. We just need to pass the surface normal and our position to the fragment shader. In addition to defining the skybox as a uniform, we will also define a uniform to control the [refractive index](https://en.wikipedia.org/wiki/Refractive_index). Transparent materials have a refractive index between 1 and 2, you can see the effect of this by running the demo.
+
+```glsl
+uniform float index;
+```
+
+The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/refraction.vs.glsl)
+
+#### Fragment Shader
+
+As with reflection, OpenGL also provides a `refract()` function that, given the incidence vector (our view vector), surface normal, and refractive index, returns the refraction direction. Below we show how to calculate this by hand.
+
+After normalizing our vectors we first calculate the angle of refraction, which describes how much the light bends.
+
+```glsl
+float angle = 1.0 - pow(index, 2.0) * (1.0 - pow(dot(n, v), 2.0));
+```
+
+Then we calculate our refracted vector using Snell's Law.
+
+```glsl
+if (angle < 0.0)
+     r = vec3(0.0, 0.0, 0.0);
+ else
+     r = index * v - (index * dot(n, v) + sqrt(angle)) * n;
+```
+The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/refraction.fs.glsl)
+<br>
+<br>
+<br>
+[Back to top](#top)

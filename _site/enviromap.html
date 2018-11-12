@@ -16,7 +16,7 @@
 <!-- End Jekyll SEO tag -->
 
 
-    <link rel="stylesheet" href="/assets/css/style.css?v=87099e26abd0eb19f2d2e5326a184164474baeeb">
+    <link rel="stylesheet" href="/assets/css/style.css?v=78e02b4b785906d50d47c64eb8ad7d8e470bdbe5">
     <meta name="viewport" content="width=device-width">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -131,16 +131,16 @@
 <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">projectionMatrix</span> <span class="o">*</span> <span class="n">viewMatrix</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">position</span> <span class="o">+</span> <span class="n">cameraPosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.vs.glsl">here</a></p>
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/skybox.vs.glsl">here</a></p>
 
 <h3 id="fragment-shader">Fragment Shader</h3>
 
-<p>Our fragment shader is quite simple as well. <code class="highlighter-rouge">glsl</code> provides the <code class="highlighter-rouge">textureCube()</code> function that samples a cubemap texture for us. We use our <code class="highlighter-rouge">vPosition</code> as the texture coordinates.</p>
+<p>Our fragment shader is quite simple as well. <code class="highlighter-rouge">glsl</code> provides the <code class="highlighter-rouge">textureCube()</code> function that samples a cubemap texture for us. <code class="highlighter-rouge">textureCube()</code> takes in a cubemap and a <code class="highlighter-rouge">vec3</code> coordinate. It returns a texel, or the color at the given coordinate. We will use our world coordinates as the texture coordinates in this case which means that we’re coloring our box geometry according to the six faces of our cubemap.</p>
 
 <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec4</span> <span class="n">color</span> <span class="o">=</span> <span class="n">textureCube</span><span class="p">(</span><span class="n">skybox</span><span class="p">,</span> <span class="n">vPosition</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.fs.glsl">here</a>
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/skybox.fs.glsl">here</a>
 <br />
 <br />
 <br />
@@ -153,9 +153,11 @@
 
 <p>The general idea behind the reflection shader is that we can calculate the bounce vector or reflection vector and then use this to sample our cubemap. The bounce vector points towards the area that you would see in a mirror, the result is a surface that looks like it is reflecting the skybox.</p>
 
+<p>The bounce vector can be imagined as bouncing off our surface and pointing in the direction of some area of the cubemap. Where the bounce vector points then determines the color of the surface.</p>
+
 <h4 id="vertex-shader-1">Vertex Shader</h4>
 
-<p>Our reflection vector is calculated using <a href="http://mathforum.org/mathimages/index.php/Snell's_Law#Reflection_of_Light">Snell’s Law</a>. We need the normal and our position, we also define the skybox as a uniform.</p>
+<p>To calculate our bounce or reflected vector, we need a view vector and our surface normal, we can use the negative of our position as our view vector. We also define the skybox as a uniform.</p>
 
 <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">uniform</span> <span class="kt">samplerCube</span> <span class="n">skybox</span><span class="p">;</span>
 <span class="k">varying</span> <span class="kt">vec3</span> <span class="n">vNormal</span><span class="p">;</span>
@@ -168,11 +170,11 @@
 <span class="n">vPosition</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="n">modelMatrix</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
 </code></pre></div></div>
 
-<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.vs.glsl">here</a></p>
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/reflection.vs.glsl">here</a></p>
 
-<h3 id="fragment-shader-1">Fragment Shader</h3>
+<h4 id="fragment-shader-1">Fragment Shader</h4>
 
-<p>In the fragment shader we need to calculate the bounce vector and then use this to sample our cubemap. OpenGL provides a <code class="highlighter-rouge">reflect()</code> function that returns the bounce vector given a normal and and incident vector (view vector). Below is how to calculate the bounce vector by hand.</p>
+<p>In the fragment shader we need to calculate the bounce vector and then use this to sample our cubemap. OpenGL provides a <code class="highlighter-rouge">reflect()</code> function that returns the bounce vector given a normal and and incident vector (our view vector). Below is how to calculate the bounce vector by hand.</p>
 
 <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kt">vec3</span> <span class="n">b</span> <span class="o">=</span> <span class="o">-</span><span class="n">v</span> <span class="o">+</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
 </code></pre></div></div>
@@ -182,13 +184,48 @@
 <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec4</span> <span class="n">color</span> <span class="o">=</span> <span class="n">textureCube</span><span class="p">(</span><span class="n">skybox</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.fs.glsl">here</a>
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/reflection.fs.glsl">here</a>
 <br />
 <br />
 <br />
 <a href="#top">Back to top</a></p>
 
 <hr />
+
+<h3 id="refraction">Refraction</h3>
+
+<p>We’ll use <a href="https://en.wikipedia.org/wiki/Snell%27s_law">Snell’s Law</a> for our <a href="https://en.wikipedia.org/wiki/Refraction">refraction</a> shader. Snell’s law describes how to calculate the change in vector direction as it goes through a material. For example, the way light bends as it travels though water or a glass.</p>
+
+<h4 id="vertex-shader-2">Vertex Shader</h4>
+
+<p>Our vertex shader is the same as reflection. We just need to pass the surface normal and our position to the fragment shader. In addition to defining the skybox as a uniform, we will also define a uniform to control the <a href="https://en.wikipedia.org/wiki/Refractive_index">refractive index</a>. Transparent materials have a refractive index between 1 and 2, you can see the effect of this by running the demo.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">uniform</span> <span class="kt">float</span> <span class="n">index</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/refraction.vs.glsl">here</a></p>
+
+<h4 id="fragment-shader-2">Fragment Shader</h4>
+
+<p>As with reflection, OpenGL also provides a <code class="highlighter-rouge">refract()</code> function that, given the incidence vector (our view vector), surface normal, and refractive index, returns the refraction direction. Below we show how to calculate this by hand.</p>
+
+<p>After normalizing our vectors we first calculate the angle of refraction, which describes how much the light bends.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">angle</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">pow</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">pow</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">),</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p>Then we calculate our refracted vector using Snell’s Law.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">angle</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span>
+     <span class="n">r</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+ <span class="k">else</span>
+     <span class="n">r</span> <span class="o">=</span> <span class="n">index</span> <span class="o">*</span> <span class="n">v</span> <span class="o">-</span> <span class="p">(</span><span class="n">index</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span>
+</code></pre></div></div>
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/refraction.fs.glsl">here</a>
+<br />
+<br />
+<br />
+<a href="#top">Back to top</a></p>
 
 
       </section>

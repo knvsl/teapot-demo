@@ -126,7 +126,7 @@ var uniforms = lambertGUI.addFolder('Uniforms');
 lambertGUI.domElement.style.display = 'none';
 
 
-// ANISOTROPHIC
+// ANISOTROPIC
 var anisoGUI = new dat.GUI( { width : 400 } );
   anisoGUI.add(resetButton, 'reset')
   .name('RESET')

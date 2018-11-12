@@ -16,7 +16,7 @@
 <!-- End Jekyll SEO tag -->
 
 
-    <link rel="stylesheet" href="/assets/css/style.css?v=87099e26abd0eb19f2d2e5326a184164474baeeb">
+    <link rel="stylesheet" href="/assets/css/style.css?v=78e02b4b785906d50d47c64eb8ad7d8e470bdbe5">
     <meta name="viewport" content="width=device-width">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -80,7 +80,7 @@
 <p>Your browser must support WebGL. Firefox and Chrome are recommended.</p>
 
 <blockquote>
-  <p>Note: Firefox or Chrome are recommended. Not tested on IE.</p>
+  <p>Note: Firefox or Chrome are recommended</p>
 
   <p>There is a known warning in Safari and some older versions of Chrome and Firefox, see <a href="https://github.com/mrdoob/three.js/issues/9716">here</a> if you encounter this:<br />
 <code class="highlighter-rouge">WARNING: 0:1: extension 'GL_ARB_gpu_shader5' is not supported</code><br /></p>
@@ -118,7 +118,7 @@
 <p><a name="organization"></a></p>
 <h3 id="organization">Organization</h3>
 
-<h4 id="glsl">glsl</h4>
+<h4 id="shaders">shaders</h4>
 <p>This folder contains all the custom shaders.</p>
 
 <h4 id="img">img</h4>
@@ -204,7 +204,7 @@ Fragment Shaders - <code class="highlighter-rouge">myShaderName.fs.glsl</code></
 <h4 id="in-detail">In detail:</h4>
 <ol>
   <li>
-    <p>To add a new shader place the file inside the <code class="highlighter-rouge">glsl</code> folder.</p>
+    <p>To add a new shader place the file inside the <code class="highlighter-rouge">shaders</code> folder.</p>
   </li>
   <li>Inside <code class="highlighter-rouge">settings.js</code> define a new <code class="highlighter-rouge">const</code> for the shader. The shader constants are used to index into an array of shaders for switching between them.<br /><br />
 <code class="highlighter-rouge">settings.js:</code><br />

@@ -83,7 +83,7 @@ The last thing we need to do is ensure that we always remain inside the skybox. 
 gl_Position = projectionMatrix * viewMatrix * vec4(position + cameraPosition, 1.0);
 ```
 
-The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.vs.glsl)
+The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/skybox.vs.glsl)
 
 ### Fragment Shader
 
@@ -93,7 +93,7 @@ Our fragment shader is quite simple as well. `glsl` provides the `textureCube()`
 vec4 color = textureCube(skybox, vPosition);
 ```
 
-The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/skybox.fs.glsl)
+The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/skybox.fs.glsl)
 <br>
 <br>
 <br>
@@ -125,7 +125,7 @@ vNormal = vec3(modelMatrix * vec4(normal, 0.0));
 vPosition = vec3(modelMatrix * vec4(position, 1.0));
 ```
 
-The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.vs.glsl)
+The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/reflection.vs.glsl)
 
 #### Fragment Shader
 
@@ -141,7 +141,7 @@ Lastly we simply sample the cubemap using the bounce vector.
 vec4 color = textureCube(skybox, b);
 ```
 
-The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/reflection.fs.glsl)
+The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/reflection.fs.glsl)
 <br>
 <br>
 <br>
@@ -161,7 +161,7 @@ Our vertex shader is the same as reflection. We just need to pass the surface no
 uniform float index;
 ```
 
-The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/refraction.vs.glsl)
+The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/refraction.vs.glsl)
 
 #### Fragment Shader
 
@@ -181,7 +181,7 @@ if (angle < 0.0)
  else
      r = index * v - (index * dot(n, v) + sqrt(angle)) * n;
 ```
-The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/glsl/refraction.fs.glsl)
+The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/refraction.fs.glsl)
 <br>
 <br>
 <br>

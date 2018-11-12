@@ -126,7 +126,7 @@ var uniforms = lambertGUI.addFolder('Uniforms');
 lambertGUI.domElement.style.display = 'none';
 
 
-// ANISOTROPHIC
+// ANISOTROPIC
 var anisoGUI = new dat.GUI( { width : 400 } );
   anisoGUI.add(resetButton, 'reset')
   .name('RESET')
@@ -205,7 +205,7 @@ var uniforms = anisoGUI.addFolder('Uniforms');
 // Hide at start
 anisoGUI.domElement.style.display = 'none';
 
-// REFLECTION + REFRACTION
+// REFLECTION
 var reflectGUI =  new dat.GUI( { width : 400 } );
   reflectGUI.add(resetButton, 'reset')
   .name('RESET')
@@ -222,6 +222,30 @@ var reflectGUI =  new dat.GUI( { width : 400 } );
 // Hide at start
 reflectGUI.domElement.style.display = 'none';
 
+// REFRACTION
+var refractGUI =  new dat.GUI( { width : 400 } );
+  refractGUI.add(resetButton, 'reset')
+  .name('RESET')
+  .onFinishChange(refreshDisplay);
+
+  refractGUI.add(settings, 'rotate')
+  .name('Rotate');
+
+  refractGUI.add(settings, 'shader', shaderMenu )
+    .name('Shader')
+    .onChange(updateShader)
+    .listen();
+
+  // Uniforms Folder
+  var uniforms = refractGUI.addFolder('Uniforms');
+    uniforms.add(index, 'value', 0, 2)
+    .name('Refractive Index')
+    .onChange(disableOrbit)
+    .onFinishChange(enableOrbit);
+
+// Hide at start
+refractGUI.domElement.style.display = 'none';
+
 //////////////////
 // Init Shaders //
 //////////////////
@@ -233,7 +257,7 @@ var blinnPhong = new shader(blinnPhongMaterial, phongGUI);
 var lambertian = new shader(lambertianMaterial, lambertGUI);
 var anisotropic = new shader(anisotropicMaterial, anisoGUI);
 var reflection = new shader(reflectionMaterial, reflectGUI);
-var refraction = new shader(refractionMaterial, reflectGUI);
+var refraction = new shader(refractionMaterial, refractGUI);
 
 shaders[PHONG] = phong;
 shaders[BLINNPHONG] = blinnPhong;

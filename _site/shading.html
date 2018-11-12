@@ -16,7 +16,7 @@
 <!-- End Jekyll SEO tag -->
 
 
-    <link rel="stylesheet" href="/assets/css/style.css?v=87099e26abd0eb19f2d2e5326a184164474baeeb">
+    <link rel="stylesheet" href="/assets/css/style.css?v=78e02b4b785906d50d47c64eb8ad7d8e470bdbe5">
     <meta name="viewport" content="width=device-width">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -28,13 +28,13 @@
         <a href="http://github.com/pages/k1mby/teapot-demo"> <h1>teapot-demo</h1> </a>
         <p></p>
 
-        
+
           <!--<p class="view"><a href="http://github.com/k1mby/teapot-demo">View the Project on GitHub <small></small></a></p>-->
-        
 
-        
 
-        
+
+
+
           <br>
           <ul class="downloads">
             <li><a href="https://github.com/k1mby/teapot-demo/archive/master.zip">Download <strong>ZIP File</strong></a></li>
@@ -42,7 +42,7 @@
             <li><a href="http://github.com/k1mby/teapot-demo">View On <strong>GitHub</strong></a></li>
           </ul>
           <br>
-        
+
           <h3>Documentation</h3>
           <a href="intro.html">Getting Started</a><br>
           <a href="shading.html">Shading Models</a><br>
@@ -62,7 +62,7 @@
 <p><a href="#lambertian">Lambertian</a><br />
 <a href="#phong">Phong</a><br />
 <a href="#bphong">Blinn-Phong</a><br />
-<a href="#aniso">Anisotrophic</a></p>
+<a href="#aniso">Anisotropic</a></p>
 
 <p><a href="./">Back to main</a>
 <br />
@@ -109,7 +109,7 @@
 <span class="n">vNormal</span> <span class="o">=</span> <span class="n">normalMatrix</span> <span class="o">*</span> <span class="n">normal</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/lambertian.vs.glsl">here</a></p>
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/lambertian.vs.glsl">here</a></p>
 
 <h4 id="fragment-shader">Fragment Shader</h4>
 
@@ -123,7 +123,7 @@
 <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">diffuseLight</span> <span class="o">=</span> <span class="n">kD</span> <span class="o">*</span> <span class="n">diffuseColor</span> <span class="o">*</span> <span class="n">diffuse</span> <span class="o">*</span> <span class="n">lightColor</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/lambertian.fs.glsl">here</a>
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/lambertian.fs.glsl">here</a>
 <br />
 <br />
 <br />
@@ -160,7 +160,7 @@
 <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vPosition</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="n">viewMatrix</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">worldPosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
 </code></pre></div></div>
 
-<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/phong.vs.glsl">here</a></p>
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/phong.vs.glsl">here</a></p>
 
 <h3 id="fragment-shader-1">Fragment Shader</h3>
 
@@ -196,7 +196,7 @@
 <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">totalLight</span> <span class="o">=</span> <span class="n">ambientLight</span> <span class="o">+</span> <span class="n">diffuseLight</span> <span class="o">+</span> <span class="n">specularLight</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/phong.fs.glsl">here</a>
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/phong.fs.glsl">here</a>
 <br />
 <br />
 <br />
@@ -217,7 +217,7 @@
 
 <p>Our vertex shader is the same as our phong vertex shader.</p>
 
-<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/blinn_phong.vs.glsl">here</a>
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/blinn_phong.vs.glsl">here</a>
 <br /><br /></p>
 
 <h4 id="fragment-shader-2">Fragment Shader</h4>
@@ -234,7 +234,7 @@
 
 <p>As before we sum our ambient, diffuse, and newly calculated specular terms to get the final result.</p>
 
-<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/blinn_phong.fs.glsl">here</a>
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/blinn_phong.fs.glsl">here</a>
 <br />
 <br />
 <br />
@@ -257,7 +257,7 @@
 
 <p>Our vertex shader is the same as our Phong and Blinn-Phong shader.</p>
 
-<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/anisotropic.vs.glsl">here</a>
+<p>The full vertex shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/anisotropic.vs.glsl">here</a>
 <br /><br /></p>
 
 <h3 id="fragment-shader-3">Fragment Shader</h3>
@@ -289,7 +289,7 @@
 
 <p>As usual we use this new specular term to compute our specular light. Finally we sum the ambient, diffuse and specular light to get our final result.</p>
 
-<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/glsl/anisotropic.vs.glsl">here</a>
+<p>The full fragment shader is <a href="https://github.com/k1mby/teapot-demo/raw/master/shaders/anisotropic.vs.glsl">here</a>
 <br />
 <br />
 <br />
@@ -298,15 +298,15 @@
 
       </section>
       <footer>
-        
+
         <p>This project is maintained by <a href="http://github.com/k1mby">k1mby</a></p>
-        
+
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
     <script src="/assets/js/scale.fix.js"></script>
 
 
-  
+
   </body>
 </html>

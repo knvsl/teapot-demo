@@ -1,7 +1,7 @@
 # teapot-demo
 A simple graphics demo built with Three.js and dat.GUI
 
-View the project on Github Pages [HERE](https://k1mby.github.io/teapot-demo/)
+View the project on Github Pages [HERE](https://knvsl.github.io/teapot-demo/)
 
 All skyboxes sourced from: http://www.custommapmakers.org/skyboxes.php
 

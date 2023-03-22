@@ -1,5 +1,5 @@
 ### A graphics demo using Three.js and dat.GUI. 
-### Try it out [live](https://k1mby.github.io/teapot-demo/src/demo.html) or download the source!
+### Try it out [live](https://knvsl.github.io/teapot-demo/src/demo.html) or download the source!
 
 See the documentation for an overview of the implementation.
 
@@ -15,7 +15,7 @@ All skyboxes sourced from: [Custom Map Makers](http://www.custommapmakers.org/sk
 
 ## Getting Started
 
-To setup and modify the demo checkout the guidelines in [Getting Started](https://k1mby.github.io/teapot-demo/intro.html)
+To setup and modify the demo checkout the guidelines in [Getting Started](https://knvsl.github.io/teapot-demo/intro.html)
 
 _______
 

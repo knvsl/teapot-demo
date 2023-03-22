@@ -59,7 +59,7 @@ vLight = vec3(viewMatrix * vec4(lightDirection, 0.0));
 vNormal = normalMatrix * normal;
 ```
 
-The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/lambertian.vs.glsl)
+The full vertex shader is [here](https://github.com/knvsl/teapot-demo/raw/master/shaders/lambertian.vs.glsl)
 
 #### Fragment Shader
 
@@ -75,7 +75,7 @@ Finally to compute our diffuse light we multiply the diffuse intensity, diffuse 
 vec3 diffuseLight = kD * diffuseColor * diffuse * lightColor;
 ```
 
-The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/lambertian.fs.glsl)
+The full fragment shader is [here](https://github.com/knvsl/teapot-demo/raw/master/shaders/lambertian.fs.glsl)
 <br>
 <br>
 <br>
@@ -114,7 +114,7 @@ The vertex shader is nearly the same as before. The difference is that our specu
 vPosition = vec3(viewMatrix * vec4(worldPosition, 1.0));
 ```
 
-The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/phong.vs.glsl)
+The full vertex shader is [here](https://github.com/knvsl/teapot-demo/raw/master/shaders/phong.vs.glsl)
 
 ### Fragment Shader
 
@@ -155,7 +155,7 @@ After calculating the ambient, diffuse, and specular terms we sum them together 
 vec3 totalLight = ambientLight + diffuseLight + specularLight;
 ```
 
-The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/phong.fs.glsl)
+The full fragment shader is [here](https://github.com/knvsl/teapot-demo/raw/master/shaders/phong.fs.glsl)
 <br>
 <br>
 <br>
@@ -176,7 +176,7 @@ If we think about microfacets in a surface, then the halfway vector is the surfa
 
 Our vertex shader is the same as our phong vertex shader.
 
-The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/blinn_phong.vs.glsl)
+The full vertex shader is [here](https://github.com/knvsl/teapot-demo/raw/master/shaders/blinn_phong.vs.glsl)
 <br><br>
 
 #### Fragment Shader
@@ -195,7 +195,7 @@ float specular = pow(max(0.0, dot(h,n)), shininess);
 
 As before we sum our ambient, diffuse, and newly calculated specular terms to get the final result.
 
-The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/blinn_phong.fs.glsl)
+The full fragment shader is [here](https://github.com/knvsl/teapot-demo/raw/master/shaders/blinn_phong.fs.glsl)
 <br>
 <br>
 <br>
@@ -218,7 +218,7 @@ We also use some new vectors, the tangent vector which will represents the brush
 
 Our vertex shader is the same as our Phong and Blinn-Phong shader.
 
-The full vertex shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/anisotropic.vs.glsl)
+The full vertex shader is [here](https://github.com/knvsl/teapot-demo/raw/master/shaders/anisotropic.vs.glsl)
 <br><br>
 
 ### Fragment Shader
@@ -253,7 +253,7 @@ float specular = sqrt(max(ln/vn, 0.0))
 
 As usual we use this new specular term to compute our specular light. Finally we sum the ambient, diffuse and specular light to get our final result.
 
-The full fragment shader is [here](https://github.com/k1mby/teapot-demo/raw/master/shaders/anisotropic.vs.glsl)
+The full fragment shader is [here](https://github.com/knvsl/teapot-demo/raw/master/shaders/anisotropic.vs.glsl)
 <br>
 <br>
 <br>

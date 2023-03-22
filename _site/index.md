@@ -14,7 +14,7 @@ All skyboxes sourced from: [Custom Map Makers](http://www.custommapmakers.org/sk
 
 ## Getting Started
 
-To setup and modify the demo checkout the guidelines in [Getting Started](https://k1mby.github.io/teapot-demo/intro.html)
+To setup and modify the demo checkout the guidelines in [Getting Started](https://knvsl.github.io/teapot-demo/intro.html)
 
 _______
 
